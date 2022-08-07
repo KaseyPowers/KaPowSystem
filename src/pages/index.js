@@ -1,6 +1,6 @@
-import { Stack, Divider, Box } from "@mui/material";
+import { Stack, Divider } from "@mui/material";
 
-import { AttributeList } from "../components";
+import { AttributeList, SettingsList } from "../components";
 
 export default function TestPage() {
   return (
@@ -13,9 +13,15 @@ export default function TestPage() {
         height: 1,
       }}
     >
-      <Box mr={-2}>
+      <Stack
+        justifyContent="flex-start"
+        alignItems="stretch"
+        spacing={2}
+        mr={-2}
+      >
         <AttributeList />
-      </Box>
+        <SettingsList />
+      </Stack>
       <div>TODO: The Rest</div>
     </Stack>
   );
