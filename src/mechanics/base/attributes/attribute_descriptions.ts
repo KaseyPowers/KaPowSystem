@@ -8,7 +8,7 @@ type DescriptionObjType = Omit<AttributeObj, OptionalDescriptionKeys> & Partial<
 // define the basic values here
 const AttributeDescriptionsByType: Record<AttributeLocation, Record<AttributeType, DescriptionObjType>> = {
     [AttributeLocation.physical]: {
-        [AttributeType.power]: { id: "STR", name: "Strength" },
+        [AttributeType.power]: { id: "str", name: "Strength", description: "Test Strength Description, Test Strength Description, Test Strength Description" },
         [AttributeType.finesse]: { id: "AGL", name: "Agility" },
         [AttributeType.awareness]: { id: "DEX", name: "Dexterity" },
         [AttributeType.resilience]: { id: "STM", name: "Stamina" },
