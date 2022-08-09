@@ -1,7 +1,9 @@
-import TestPage from "./pages";
+import { CardPage } from "./pages";
 
-function App2() {
-  return <TestPage />;
-}
+// function App() {
+//   return <TestPage />;
+// }
 
-export default App2;
+// export default App;
+
+export default CardPage;

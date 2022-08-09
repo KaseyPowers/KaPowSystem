@@ -1,0 +1,1 @@
+export { default as AttributeCard } from "./attribute_card";
