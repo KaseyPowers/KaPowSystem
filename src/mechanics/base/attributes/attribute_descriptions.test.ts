@@ -1,7 +1,7 @@
 import { AttributeLocation, AttributeType } from "./attribute_types";
 import {
     Attributes,
-    AttributesByPartShorthand
+    // AttributesByPartShorthand
 } from "./attribute_descriptions";
 
 const locationValues: AttributeLocation[] = Object.values(AttributeLocation);
@@ -27,7 +27,7 @@ describe("Attribute descriptions", () => {
         expect(names.size).toBe(expectedCombinations);
     });
 
-    test("Should have the correct amount of shorthand options defined", () => {
-        expect(AttributesByPartShorthand.size).toBe(expectedCombinations);
-    });
+    // test("Should have the correct amount of shorthand options defined", () => {
+    //     expect(AttributesByPartShorthand.size).toBe(expectedCombinations);
+    // });
 })

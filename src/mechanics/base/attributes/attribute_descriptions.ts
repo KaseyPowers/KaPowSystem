@@ -30,7 +30,7 @@ const AttributeDescriptionsByType: Record<AttributeLocation, Record<AttributeTyp
 // object of attributes mapped by id
 const Attributes: Record<string, AttributeObj> = {};
 // mappings for attribute parts to the id's
-const AttributesByPartShorthand = new Map<AttributePartShorthand, string>();
+// const AttributesByPartShorthand = new Map<AttributePartShorthand, string>();
 
 const AttributesByPart = Object.values(AttributeLocation).reduce((locOutput, location) => {
     locOutput[location] = Object.values(AttributeType).reduce((typeOutput, type) => {
@@ -40,19 +40,36 @@ const AttributesByPart = Object.values(AttributeLocation).reduce((locOutput, loc
         const id = obj.id;
         Attributes[id] = {
             ...obj,
-            shorthand: (obj.shorthand || id).toUpperCase(),
+            shorthand: obj.shorthand || id.toUpperCase(),
             parts
         };
 
-        AttributesByPartShorthand.set(parts, id);
+        // AttributesByPartShorthand.set(parts, id);
         typeOutput[type] = id;
         return typeOutput;
     }, {} as Record<AttributeType, string>);
     return locOutput;
 }, {} as Record<AttributeLocation, Record<AttributeType, string>>);
 
+function capitalize(val: string) {
+    return val.slice(0, 1).toUpperCase() + val.slice(1);
+}
+
+
+const categoryDescription = `Attributes are divided into 3 locations (${Object.values(AttributeLocation).map(val => capitalize(val)).join(", ")}), each with 4 aspects (${Object.values(AttributeType).map(val => capitalize(val)).join(", ")}).`;
+
+const mainDescription = "Attributes define latent aptitude, while skills refer to learned abilities.";
+
+
+
+export const AttributesDescription = {
+    category: categoryDescription,
+    mainText: mainDescription,
+    total: [mainDescription, categoryDescription].join(" ")
+};
+
 export {
     Attributes,
     AttributesByPart,
-    AttributesByPartShorthand
+    // AttributesByPartShorthand   
 };

@@ -11,45 +11,67 @@ import {
 
 import { AttributeObj } from "../../mechanics";
 
+type AttributeProp = { attribute: AttributeObj };
+
+function AttributeMain({ attribute }: AttributeProp) {
+  return (
+    <ListItemText disableTypography>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        spacing={1}
+      >
+        <Stack
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="baseline"
+          spacing={1}
+          flexGrow={1}
+        >
+          <Typography variant="subtitle2" component="span">
+            {attribute.shorthand}
+          </Typography>
+          <Typography variant="subtitle1" component="strong">
+            {attribute.name}
+          </Typography>
+        </Stack>
+        <Typography variant="caption" component="span">
+          {attribute.parts[1]}
+        </Typography>
+      </Stack>
+    </ListItemText>
+  );
+}
+
+export function AttributeListItem2({ attribute }: AttributeProp) {
+  // const canOpenDescription = !!attribute.description;
+  return (
+    <ListItem
+      // disableGutters={canOpenDescription}
+      sx={{ paddingRight: 1, alignItems: "stretch" }}
+    >
+      <AttributeMain attribute={attribute} />
+    </ListItem>
+  );
+}
+
 export default function AttributeListItem({
   attribute,
-  divider,
 }: {
   attribute: AttributeObj;
-  divider?: boolean;
 }) {
   const [descriptionOpen, setDescriptionOpen] = useState(false);
   const canOpenDescription = !!attribute.description;
   const onDescriptionClick: () => void = () =>
     setDescriptionOpen((current) => !current);
 
-  const mainText = (
-    <ListItemText disableTypography>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="baseline"
-        spacing={1}
-        mb={-1}
-      >
-        <Typography variant="h6" sx={{ display: "inline" }}>
-          {attribute.name}
-        </Typography>
-        <Typography variant="subtitle1" sx={{ display: "inline" }}>
-          {attribute.shorthand}
-        </Typography>
-      </Stack>
-      <Typography variant="caption">
-        {`${attribute.parts[0]}-${attribute.parts[1]}`}
-      </Typography>
-    </ListItemText>
-  );
-
   const [weightsOpen, setWeightsOpen] = useState(false);
   const canOpenWeights = true;
   const onWeightsClick: () => void = () =>
     setWeightsOpen((current) => !current);
 
+  const main = <AttributeMain attribute={attribute} />;
   return (
     <>
       <ListItem
@@ -61,10 +83,10 @@ export default function AttributeListItem({
             selected={descriptionOpen}
             onClick={() => onDescriptionClick()}
           >
-            {mainText}
+            {main}
           </ListItemButton>
         ) : (
-          mainText
+          main
         )}
         <ListItemButton
           sx={{ flex: "0 1 auto" }}
@@ -111,7 +133,6 @@ export default function AttributeListItem({
           </ListItem>
         </Collapse>
       )}
-      {divider && <Divider />}
     </>
   );
 }

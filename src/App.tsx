@@ -1,4 +1,5 @@
-import { CardPage } from "./pages";
+// import { CardPage } from "./pages";
+import { TestPage } from "./pages";
 
 // function App() {
 //   return <TestPage />;
@@ -6,4 +7,4 @@ import { CardPage } from "./pages";
 
 // export default App;
 
-export default CardPage;
+export default TestPage;

@@ -1,1 +1,1 @@
-export * from "./attribute_list";
+export { default as AttributesCard } from "./attributes_card";
