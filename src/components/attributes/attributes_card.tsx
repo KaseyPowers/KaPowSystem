@@ -39,7 +39,7 @@ export default function AttributesCard() {
             return (
               <React.Fragment key={location}>
                 <Divider component="li">
-                  <Chip label={location + ": 0"} />
+                  <Chip label={location} />
                 </Divider>
                 {types.map((type, index) => {
                   const isFirst = index === 0;

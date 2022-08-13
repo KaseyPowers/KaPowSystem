@@ -5,6 +5,8 @@ import { AttributeLocation, AttributeType, AttributePartShorthand, AttributeObj 
 type OptionalDescriptionKeys = "parts" | "shorthand";
 type DescriptionObjType = Omit<AttributeObj, OptionalDescriptionKeys> & Partial<Pick<AttributeObj, OptionalDescriptionKeys>>;
 
+
+
 // define the basic values here
 const AttributeDescriptionsByType: Record<AttributeLocation, Record<AttributeType, DescriptionObjType>> = {
     [AttributeLocation.physical]: {
@@ -51,12 +53,7 @@ const AttributesByPart = Object.values(AttributeLocation).reduce((locOutput, loc
     return locOutput;
 }, {} as Record<AttributeLocation, Record<AttributeType, string>>);
 
-function capitalize(val: string) {
-    return val.slice(0, 1).toUpperCase() + val.slice(1);
-}
-
-
-const categoryDescription = `Attributes are divided into 3 locations (${Object.values(AttributeLocation).map(val => capitalize(val)).join(", ")}), each with 4 aspects (${Object.values(AttributeType).map(val => capitalize(val)).join(", ")}).`;
+const categoryDescription = `Attributes are divided into 3 locations (${Object.values(AttributeLocation).join(", ")}), each with 4 aspects (${Object.values(AttributeType).join(", ")}).`;
 
 const mainDescription = "Attributes define latent aptitude, while skills refer to learned abilities.";
 

@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 
-import { Attributes } from "../base";
+import { Attributes } from "../../base";
 
-import { FlagsState } from "./flags_state";
-import { SelectedState } from "./use_selected";
+import { FlagsState } from "../flags_state";
+import { SelectedState } from "../use_selected";
 
-import { MechanicsObj } from "./mechanics_obj";
+import { MechanicsObj } from "../mechanics_obj";
 
 export type BaseMechanicsContextState = FlagsState & SelectedState;
 
