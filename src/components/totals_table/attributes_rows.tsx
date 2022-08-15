@@ -2,15 +2,15 @@
 import { TableRow, TableCell } from "@mui/material";
 
 import {
-  AttributesByPart,
+  AttributeIdByPart,
   Attributes,
   // AttributesDescription,
   AttributeLocation,
-  AttributeType,
+  AttributeCategory,
 } from "../../mechanics";
 
 const locations = Object.values(AttributeLocation);
-const types = Object.values(AttributeType);
+const types = Object.values(AttributeCategory);
 
 // const attributesTotal = locations.length * types.length;
 
@@ -18,7 +18,7 @@ function AttributeRows() {
   const outputRows: JSX.Element[] = [];
 
   locations.forEach((location) => {
-    const locationAttriutes = AttributesByPart[location];
+    const locationAttriutes = AttributeIdByPart[location];
     types.forEach((type, index) => {
       const isFirstType = index === 0;
       const id = locationAttriutes[type];
@@ -37,7 +37,7 @@ function AttributeRows() {
               {location}
             </TableCell>
           )}
-          <TableCell>{attribute.shorthand}</TableCell>
+          <TableCell>{attribute.abbreviation}</TableCell>
           {/* Totals, tbd final values */}
           <TableCell>3</TableCell>
           <TableCell>2</TableCell>

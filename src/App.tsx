@@ -1,5 +1,5 @@
 // import { CardPage } from "./pages";
-import { TestPage } from "./pages";
+import { AttributeWeights } from "./pages";
 
 // function App() {
 //   return <TestPage />;
@@ -7,4 +7,4 @@ import { TestPage } from "./pages";
 
 // export default App;
 
-export default TestPage;
+export default AttributeWeights;

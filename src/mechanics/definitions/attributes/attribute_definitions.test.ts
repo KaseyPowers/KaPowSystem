@@ -1,23 +1,19 @@
-import { AttributeLocation, AttributeType } from "./attribute_types";
+import { attributeLocationValues, attributeCategoryValues } from "./attribute_types";
 import {
     Attributes,
-    // AttributesByPartShorthand
-} from "./attribute_descriptions";
+    AttributeIdByPartShorthand
+} from "./attribute_definitions";
 
-const locationValues: AttributeLocation[] = Object.values(AttributeLocation);
-const typeValues = Object.values(AttributeType);
-const expectedCombinations = locationValues.length * typeValues.length;
-
+const expectedCombinations = attributeLocationValues.length * attributeCategoryValues.length;
 const attributeKeys = Object.keys(Attributes);
 
-describe("Attribute descriptions", () => {
-
+describe("Attribute definitions", () => {
     // this will confirm that the shorthand is unique as well since it's used as id
     test(`Should have ${expectedCombinations} attributes`, () => {
         expect(attributeKeys.length).toBe(expectedCombinations);
     });
 
-    test("should have unique names", () => {
+    test("Should have unique names", () => {
         const names = new Set<string>();
         attributeKeys.forEach(key => {
             const name = Attributes[key].name;
@@ -27,7 +23,10 @@ describe("Attribute descriptions", () => {
         expect(names.size).toBe(expectedCombinations);
     });
 
-    // test("Should have the correct amount of shorthand options defined", () => {
-    //     expect(AttributesByPartShorthand.size).toBe(expectedCombinations);
-    // });
+    /** AttributeIdByPart should be safe from typescript checking */
+
+    /** Test AttributeIdByPartShorthand map */
+    test("Should have the right amount of attributes by PartShorthand", () => {
+        expect(AttributeIdByPartShorthand.size).toBe(expectedCombinations);
+    })
 })
