@@ -1,55 +1,83 @@
-import { OptionalKeysObject, ReplaceType } from "../../utils";
-
-/*
-
-Each part is either:
-- a single item (T) representing that part
-- an array of items (T[]) with an optional flag "mod"
-- an array item is shorthand for the object with parts: T[]
-- Each Mod enum value represents a different way to handle the values, if undefined will use the defined default
- */
-
-
-export enum PartMod {
+export enum ModifierComparison {
     // add all the parts together
     sum = "sum",
     // use the highest value
     max = "max",
     // use the lowest value
-    min = "min",
-}
-// by default will use the highest of the listed
-export const DefaultPartMod = PartMod.max;
-
-export type ModifierPart<T> = {
-    parts: T[],
-    mod: PartMod
-};
-
-type ModifierPartDefinitionObj<T> = OptionalKeysObject<ModifierPart<T>, "mod">;
-
-export type ModifierPartDefinition<T> = T | T[] | ModifierPartDefinitionObj<T>;
-
-function isInputObj<T>(input: ModifierPartDefinition<T>): input is ModifierPartDefinitionObj<T> {
-    return "parts" in input && Array.isArray(input);
+    // min = "min",
 }
 
-export function normalizeModifier<T>(input: ModifierPartDefinition<T>): ModifierPart<T> {
-    let parts: T[];
-    let mod = DefaultPartMod;
-    if (isInputObj(input)) {
-        parts = input.parts;
-        if (input.mod) {
-            mod = input.mod;
-        }
-    } else {
-        parts = Array.isArray(input) ? input : [input];
+
+export interface ModifierParts {
+    mod: ModifierComparison,
+    parts: string[],
+}
+
+type partsInput = string | string[] | (Pick<ModifierParts, "parts"> & Partial<Omit<ModifierParts, "parts">>);
+export function getModifierParts(input: partsInput, defaultComparison = ModifierComparison.max): Readonly<ModifierParts> {
+    if (typeof input === "string" || Array.isArray(input)) {
+        const parts: string[] = Array<string>().concat(input);
+        return {
+            parts,
+            mod: defaultComparison
+        };
     }
-
     return {
-        parts,
-        mod
+        mod: defaultComparison,
+        ...input
     };
 }
 
-export type SwapModifierDefinitions<Obj, Keys extends keyof Obj, T> = ReplaceType<Obj, Keys, ModifierPartDefinition<T>>;
+export interface ModifierOptions {
+    mod: ModifierComparison,
+    options: {
+        [key: string]: ModifierParts
+    }
+}
+
+type optionsInput = {
+    mod?: ModifierComparison,
+    options: {
+        [key: string]: partsInput
+    }
+};
+export function getModifierOptions(input: optionsInput, defaultComparison?: ModifierComparison): Readonly<ModifierOptions> {
+    return {
+        mod: input.mod || defaultComparison || ModifierComparison.sum,
+        options: Object.keys(input.options).reduce((output, key) => {
+            output[key] = getModifierParts(input.options[key], defaultComparison);
+            return output;
+        }, {} as Record<string, ModifierParts>)
+    };
+}
+
+
+const ComparisonJoins: Record<ModifierComparison, string> = {
+    [ModifierComparison.sum]: " + ",
+    [ModifierComparison.max]: "/",
+    // [ModifierComparison.min]: " + ",
+}
+
+
+// TODO: mapping for input string to 
+export function getModifierString(input: ModifierOptions, mapFn?: (part: string, option: string) => string) {
+    const baseMod = input.mod;
+    const optionParts = Object.keys(input.options).map(key => {
+        const { parts, mod } = input.options[key];
+
+        const useParts = mapFn ? parts.map(prt => mapFn(prt, key)) : parts;
+
+        const partStr = useParts.join(
+            ComparisonJoins[mod]
+        );
+        return {
+            mod, value: partStr
+        };
+    });
+
+    return optionParts.map(partObj => {
+        return (optionParts.length > 1 && partObj.mod !== baseMod) ? `(${partObj.value})` : partObj.value;
+    }).join(
+        ComparisonJoins[baseMod]
+    );
+}

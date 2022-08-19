@@ -12,17 +12,16 @@ export enum AttributeCategory {
     resilience = "Resilience"
 };
 
-export type AttributePartShorthand = [AttributeLocation, AttributeCategory];
-
 export const attributeLocationValues = Object.values(AttributeLocation);
 export const attributeCategoryValues = Object.values(AttributeCategory);
 
-export interface Attribute extends BaseDefinition {
+type BaseRequiredShorthand = Omit<BaseDefinition, "shorthand"> & Required<Pick<BaseDefinition, "shorthand">>;
+export interface Attribute extends BaseRequiredShorthand {
     /** Calculated from the location + type */
     location: AttributeLocation,
     category: AttributeCategory,
-    parts: AttributePartShorthand
 }
+
 
 
 

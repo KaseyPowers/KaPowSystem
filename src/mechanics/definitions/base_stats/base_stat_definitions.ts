@@ -1,56 +1,66 @@
-import { PartMod, GeneralGameplayType } from "../../common";
+import { OptionalKeysObject } from "../../../utils";
 
-import { AttributeLocation, AttributeCategory, AttributeIdByPartShorthand } from "../attributes";
+import { GeneralGameplayType, getGameplayWeights, getModifierOptions, ModifierComparison } from "../../common";
 
-import { BaseStat, SimpleBaseStateDefinitionType } from "./base_stat_types";
+import { AttributeLocation, AttributeCategory, attributeIdByPart } from "../attributes";
 
-type BaseStatDefinition = SimpleBaseStateDefinitionType<BaseStat, "name">;
+import { BaseStat } from "./base_stat_types";
 
-/** NOTE: forcing attribute ids to be treated as strings, can confirm in tests */
-const BaseStatDefinitions: BaseStatDefinition[] = [
-    {
-        id: "HP",
-        description: "HP is based on Stamina and Willpower. This represents the ability to shrug off damage, as well as the willpower to keep going while hurt",
-        attributes: {
-            parts: [
-                AttributeIdByPartShorthand.get([AttributeLocation.physical, AttributeCategory.resilience]) as string,
-                AttributeIdByPartShorthand.get([AttributeLocation.social, AttributeCategory.resilience]) as string,
-            ],
-            mod: PartMod.sum
-        },
-        gameplayWeight: {
-            [GeneralGameplayType.combat]: 2
-        }
-    },
-    {
-        id: "Initiative",
-        attributes: [
-            AttributeIdByPartShorthand.get([AttributeLocation.physical, AttributeCategory.finesse]) as string,
-            AttributeIdByPartShorthand.get([AttributeLocation.mental, AttributeCategory.power]) as string,
-            AttributeIdByPartShorthand.get([AttributeLocation.physical, AttributeCategory.awareness]) as string,
-        ],
-        gameplayWeight: {
-            [GeneralGameplayType.combat]: 1
-        }
-    }
-];
+type BaseStatDefinition = OptionalKeysObject<BaseStat, "name">
+
+function getBaseStat(definition: BaseStatDefinition): Readonly<BaseStat> {
+    return {
+        ...definition,
+        name: definition.name || definition.id,
+    };
+}
 
 /** Define outputs */
 type BaseStatId = BaseStat["id"];
-/** Tracking ids in the order defined */
-const BaseStatIds: BaseStatId[] = [];
 
-const BaseStats = BaseStatDefinitions.reduce((output, definition) => {
-    const id = definition.id;
-    BaseStatIds.push(id);
-    output[id] = {
-        ...definition,
-        name: definition.name || id
-    };
+
+const BaseStatsArr: BaseStat[] = [
+    getBaseStat({
+        id: "HP",
+        description: "HP is based on Stamina and Willpower. This represents the ability to shrug off damage, as well as the willpower to keep going while hurt",
+        gameplayWeight: getGameplayWeights({
+            [GeneralGameplayType.combat]: 4
+        }),
+        mods: getModifierOptions({
+            options: {
+                attributes: [
+                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.resilience],
+                    attributeIdByPart[AttributeLocation.social][AttributeCategory.resilience],
+                ]
+            }
+        }, ModifierComparison.sum)
+    }),
+    getBaseStat({
+        id: "Initiative",
+        gameplayWeight: getGameplayWeights({
+            [GeneralGameplayType.combat]: 1
+        }),
+        mods: getModifierOptions({
+            options: {
+                attributes: [
+                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.finesse],
+                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.finesse]
+                ]
+            }
+        })
+    })
+];
+
+/** Tracking ids in the order defined */
+const baseStatIds: BaseStatId[] = []
+const baseStats: Record<BaseStatId, BaseStat> = BaseStatsArr.reduce((output, stat) => {
+    const id = stat.id;
+    baseStatIds.push(id);
+    output[id] = stat;
     return output;
 }, {} as Record<BaseStatId, BaseStat>);
 
 export {
-    BaseStatIds,
-    BaseStats
+    baseStatIds,
+    baseStats,
 };

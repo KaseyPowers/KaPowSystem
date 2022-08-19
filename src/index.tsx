@@ -14,9 +14,27 @@ import CssBaseline from "@mui/material/CssBaseline";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+const defaultTheme = createTheme();
+
 const darkTheme = createTheme({
   palette: {
     mode: "dark",
+  },
+  components: {
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          paddingBottom: defaultTheme.spacing(0.5),
+        },
+      },
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          paddingTop: defaultTheme.spacing(1),
+        },
+      },
+    },
   },
 });
 

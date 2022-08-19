@@ -1,27 +1,27 @@
 import { Card, CardContent, CardHeader } from "@mui/material";
 
 import {
-  AttributeIdByPart,
-  Attributes,
+  attributeIdByPart,
+  attributes,
   attributeLocationValues,
   attributeCategoryValues,
-} from "../../mechanics";
+} from "../mechanics";
 
-import { DefinitionDataItem, DefinitionList } from "../definitions_list";
+import { DefinitionDataItem, DefinitionList } from "./definitions_list";
 
 const listItems: DefinitionDataItem[] = attributeLocationValues.map(
   (location) => {
-    const locationAttriutes = AttributeIdByPart[location];
+    const locationAttriutes = attributeIdByPart[location];
     return {
       id: location,
       items: attributeCategoryValues.map((category) => {
         const id = locationAttriutes[category];
-        const attribute = Attributes[id];
+        const attribute = attributes[id];
         return {
           id,
           primary: attribute.name,
-          secondary: attribute.abbreviation,
-          caption: attribute.parts[1],
+          secondary: attribute.shorthand,
+          caption: attribute.category,
           definition: attribute.description,
         };
       }),
@@ -30,7 +30,7 @@ const listItems: DefinitionDataItem[] = attributeLocationValues.map(
 );
 
 // defining the different sizes for different levels of definitions
-export default function AttributesCard() {
+export function AttributesCard() {
   return (
     <Card>
       <CardHeader

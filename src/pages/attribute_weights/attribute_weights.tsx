@@ -1,6 +1,9 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography, Stack } from "@mui/material";
 
-import { AttributesCard, TotalsTableCard } from "../../components";
+import { AttributesCard, BaseStatsCard, SkillsCard } from "../../components";
+
+import ComparisonsTableCard from "./comparison_table_card";
+import WeightsTableCard from "./weights_table_card";
 
 export function AttributeWeights() {
   return (
@@ -8,12 +11,31 @@ export function AttributeWeights() {
       <Typography variant="h2" align="center" gutterBottom>
         Ka-Pow System
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={4}>
-          <AttributesCard />
+      <Grid container spacing={2} alignItems="flex-start">
+        <Grid item xs={3}>
+          <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="stretch"
+            spacing={2}
+          >
+            <AttributesCard />
+            <BaseStatsCard />
+          </Stack>
         </Grid>
-        <Grid item xs={12} md={8}>
-          <TotalsTableCard />
+        <Grid item xs={3}>
+          <SkillsCard />
+        </Grid>
+        <Grid item xs={6}>
+          <Stack
+            direction="column"
+            justifyContent="flex-start"
+            alignItems="stretch"
+            spacing={2}
+          >
+            <WeightsTableCard />
+            <ComparisonsTableCard />
+          </Stack>
         </Grid>
       </Grid>
     </Container>

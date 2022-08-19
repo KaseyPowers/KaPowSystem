@@ -1,7 +1,7 @@
-import { SimpleDefinitionType } from "../../common";
-import { AttributeLocation, attributeLocationValues, AttributeCategory, attributeCategoryValues, Attribute, AttributePartShorthand } from "./attribute_types";
+import { OptionalKeysObject } from "../../../utils";
+import { AttributeLocation, attributeLocationValues, AttributeCategory, attributeCategoryValues, Attribute } from "./attribute_types";
 
-type AttributeDefinition = SimpleDefinitionType<Attribute, "parts" | "location" | "category" | "abbreviation">;
+type AttributeDefinition = OptionalKeysObject<Attribute, "location" | "category" | "shorthand">
 
 type AttributePartsObj<T> = Record<AttributeLocation, Record<AttributeCategory, T>>;
 
@@ -40,28 +40,29 @@ const AttributeDefinitionsByType: AttributePartsObj<AttributeDefinition> = {
 
 type AttributeId = Attribute["id"];
 // object of attributes mapped by id
-const Attributes: Record<AttributeId, Attribute> = {};
-const AttributeIdByPartShorthand = new Map<AttributePartShorthand, AttributeId>();
+const attributes: Record<AttributeId, Attribute> = {};
+// const AttributeIdByPartShorthand = new Map<AttributePartShorthand, AttributeId>();
 
 type AttributeIdByPartType = AttributePartsObj<AttributeId>;
 
-const AttributeIdByPart: AttributeIdByPartType = attributeLocationValues.reduce((locOutput, location) => {
+
+function getAttribute(input: AttributeDefinition, location: AttributeLocation, category: AttributeCategory): Readonly<Attribute> {
+    return {
+        ...input,
+        id: input.id.toLowerCase(),
+        shorthand: (input.shorthand || input.id).toUpperCase(),
+        location,
+        category
+    };
+}
+
+const attributeIdByPart: AttributeIdByPartType = attributeLocationValues.reduce((locOutput, location) => {
     locOutput[location] = attributeCategoryValues.reduce((categoryOutput, category) => {
         const definition = AttributeDefinitionsByType[location][category];
-        // keep the id lowercase for simplicity
-        const id = definition.id.toLowerCase();
-        // build parts shorthand tuple
-        const parts: AttributePartShorthand = [location, category];
-        // normalize the object and add to the final object
-        Attributes[id] = {
-            ...definition,
-            // make sure abbreviation is uppercase            
-            abbreviation: (definition.abbreviation || id).toUpperCase(),
-            parts,
-            location: location,
-            category: category,
-        };
-        AttributeIdByPartShorthand.set(parts, id);
+
+        const attribute = getAttribute(definition, location, category);
+        const id = attribute.id;
+        attributes[id] = attribute;
         categoryOutput[category] = id;
         return categoryOutput;
     }, {} as Record<AttributeCategory, AttributeId>);
@@ -70,7 +71,6 @@ const AttributeIdByPart: AttributeIdByPartType = attributeLocationValues.reduce(
 }, {} as AttributeIdByPartType);
 
 export {
-    Attributes,
-    AttributeIdByPart,
-    AttributeIdByPartShorthand
+    attributes,
+    attributeIdByPart,
 };

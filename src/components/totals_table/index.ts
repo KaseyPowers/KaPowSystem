@@ -1,1 +1,0 @@
-export { default as TotalsTableCard } from "./table_card";

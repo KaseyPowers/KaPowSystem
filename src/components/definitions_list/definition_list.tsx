@@ -19,7 +19,7 @@ function RenderDataItem({ item, groupStyle, ...itemOptions }: RenderItemProps) {
     switch (groupStyle) {
       case GroupStyleTypes.divider:
         return (
-          <React.Fragment key={item.id}>
+          <React.Fragment>
             <Divider component="li">
               <Chip label={item.label || item.id} />
             </Divider>
@@ -52,7 +52,9 @@ export function DefinitionList({ listData, ...options }: DefinitionListProps) {
   return (
     <List dense>
       {listData.map((dataItem) => {
-        return <RenderDataItem item={dataItem} {...optionProps} />;
+        return (
+          <RenderDataItem key={dataItem.id} item={dataItem} {...optionProps} />
+        );
       })}
     </List>
   );

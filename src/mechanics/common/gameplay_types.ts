@@ -7,8 +7,14 @@ export enum GeneralGameplayType {
     social = "Social"
 };
 
+export type GameplayWeights = Record<GeneralGameplayType, number>;
 
-// the weight for a value is just a number for now, could find a way to limit it though?
-type Weight = number;
+export const gameplayTypes: GeneralGameplayType[] = Object.values(GeneralGameplayType);
 
-export type GameplayValueWeight = Weight | Partial<Record<GeneralGameplayType, Weight>>;
+export function getGameplayWeights(input: number | Partial<GameplayWeights>): Readonly<GameplayWeights> {
+    const inputIsNumber = typeof input === "number";
+    return gameplayTypes.reduce((output, key) => {
+        output[key] = inputIsNumber ? input : (input[key] || 0);
+        return output;
+    }, {} as GameplayWeights);
+}
