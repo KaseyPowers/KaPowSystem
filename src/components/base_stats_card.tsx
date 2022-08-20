@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader } from "@mui/material";
+import { Card } from "@mui/material";
 
 import {
   baseStatIds,
@@ -7,7 +7,8 @@ import {
   attributes,
 } from "../mechanics";
 
-import { DefinitionDataItem, DefinitionList } from "./definitions_list";
+import type { DefinitionDataItem } from "./definitions_list";
+import { ListCardContent, StandardContentProps } from "./card_content";
 
 const listData: DefinitionDataItem[] = baseStatIds.map((id) => {
   const stat = baseStats[id];
@@ -20,14 +21,15 @@ const listData: DefinitionDataItem[] = baseStatIds.map((id) => {
   };
 });
 
+export function BaseStatsCardContent(props: StandardContentProps) {
+  return <ListCardContent title="Base Stats" listData={listData} {...props} />;
+}
+
 // defining the different sizes for different levels of definitions
-export function BaseStatsCard() {
+export function BaseStatsCard(props: StandardContentProps) {
   return (
     <Card>
-      <CardHeader title="Base Stats" sx={{ paddingBottom: 0 }} />
-      <CardContent sx={{ paddingTop: 0 }}>
-        <DefinitionList listData={listData} />
-      </CardContent>
+      <BaseStatsCardContent {...props} />
     </Card>
   );
 }

@@ -21,17 +21,27 @@ const darkTheme = createTheme({
     mode: "dark",
   },
   components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          padding: defaultTheme.spacing(2),
+        },
+      },
+    },
     MuiCardHeader: {
       styleOverrides: {
         root: {
-          paddingBottom: defaultTheme.spacing(0.5),
+          padding: 0,
         },
       },
     },
     MuiCardContent: {
       styleOverrides: {
         root: {
-          paddingTop: defaultTheme.spacing(1),
+          padding: 0,
+          "&:last-child": {
+            paddingBottom: 0,
+          },
         },
       },
     },

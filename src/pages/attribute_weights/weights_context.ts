@@ -86,7 +86,6 @@ class AttributeWeights {
         Object.keys(baseStats).forEach(statId => {
             const stat = baseStats[statId];
             const { gameplayWeight, mods } = stat;
-            debugger;
             this.addModifierWeights(mods.options.attributes, gameplayWeight);
             this.addModifierComparisons(mods.options.attributes);
         })

@@ -16,10 +16,33 @@ function getSkill(input: SkillDefinition): Readonly<Skill> {
     };
 }
 
-function getSkills(input: SkillDefinition[]): Readonly<Skill>[] {
-    return input.map(skill => {
-        return getSkill(skill);
+interface SkillGroup extends SkillDefinition {
+    children: (Pick<SkillDefinition, "id"> & Partial<Omit<SkillDefinition, "id">>)[]
+}
+
+function getSkillGroup(input: SkillGroup): Readonly<Skill>[] {
+    const { children, ...rest } = input;
+    return children.map(child => {
+        return getSkill({
+            ...rest,
+            ...child,
+            id: [rest.id, child.id].filter(Boolean).join("-"),
+            name: child.name || child.id
+        });
     });
+}
+
+function getSkills(input: (SkillDefinition | SkillGroup)[]): Readonly<Skill>[] {
+    const output: Skill[] = [];
+
+    input.forEach(skill => {
+        if ("children" in skill) {
+            output.push(...getSkillGroup(skill));
+        } else {
+            output.push(getSkill(skill))
+        }
+    });
+    return output;
 }
 
 const skillDefinitions = getSkills([
@@ -27,7 +50,7 @@ const skillDefinitions = getSkills([
         id: "Accuracy",
         gameplayWeight: getGameplayWeights({
             [GeneralGameplayType.combat]: 2,
-            [GeneralGameplayType.exploration]: 1.5,
+            [GeneralGameplayType.exploration]: 1,
             [GeneralGameplayType.social]: 1
         }),
         mods: getModifierOptions({
@@ -45,7 +68,7 @@ const skillDefinitions = getSkills([
         mods: getModifierOptions({
             options: {
                 attributes: [
-                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.finesse],
+                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.speed],
                     attributeIdByPart[AttributeLocation.physical][AttributeCategory.awareness]
                 ]
             }
@@ -56,7 +79,7 @@ const skillDefinitions = getSkills([
         gameplayWeight: getGameplayWeights({
             [GeneralGameplayType.combat]: 1,
             [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 0.25
+            [GeneralGameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -87,14 +110,14 @@ const skillDefinitions = getSkills([
     {
         id: "Acrobatics",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0.5,
+            [GeneralGameplayType.combat]: 0.25,
             [GeneralGameplayType.exploration]: 1,
             [GeneralGameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
                 attributes: [
-                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.finesse],
+                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.speed],
                     attributeIdByPart[AttributeLocation.physical][AttributeCategory.awareness]
                 ]
             }
@@ -103,7 +126,7 @@ const skillDefinitions = getSkills([
     {
         id: "Investigation",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0.5,
+            [GeneralGameplayType.combat]: 0.25,
             [GeneralGameplayType.exploration]: 1,
             [GeneralGameplayType.social]: 1
         }),
@@ -127,7 +150,7 @@ const skillDefinitions = getSkills([
             options: {
                 attributes: [
                     attributeIdByPart[AttributeLocation.social][AttributeCategory.power],
-                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.finesse]
+                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.speed]
                 ]
             }
         })
@@ -142,8 +165,8 @@ const skillDefinitions = getSkills([
         mods: getModifierOptions({
             options: {
                 attributes: [
-                    attributeIdByPart[AttributeLocation.social][AttributeCategory.finesse],
-                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.finesse]
+                    attributeIdByPart[AttributeLocation.social][AttributeCategory.speed],
+                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.speed]
                 ]
             }
         })
@@ -176,7 +199,7 @@ const skillDefinitions = getSkills([
             options: {
                 attributes: [
                     attributeIdByPart[AttributeLocation.social][AttributeCategory.power],
-                    attributeIdByPart[AttributeLocation.social][AttributeCategory.finesse]
+                    attributeIdByPart[AttributeLocation.social][AttributeCategory.speed]
                 ]
             }
         })
@@ -196,7 +219,18 @@ const skillDefinitions = getSkills([
                     attributeIdByPart[AttributeLocation.mental][AttributeCategory.resilience]
                 ]
             }
-        })
+        }),
+        children: [
+            {
+                id: "History",
+            },
+            {
+                id: "Nature",
+            },
+            {
+                id: "Culture"
+            }
+        ]
     },
     {
         id: "Medicine",
@@ -212,11 +246,7 @@ const skillDefinitions = getSkills([
     },
     {
         id: "Cooking",
-        gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 1,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
-        }),
+        gameplayWeight: getGameplayWeights(0.5),
         mods: getModifierOptions({
             options: {
                 attributes: [
@@ -228,27 +258,19 @@ const skillDefinitions = getSkills([
     },
     {
         id: "Invent",
-        gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 1,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
-        }),
+        gameplayWeight: getGameplayWeights(1),
         mods: getModifierOptions({
             options: {
                 attributes: [
                     attributeIdByPart[AttributeLocation.mental][AttributeCategory.power],
-                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.finesse]
+                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.speed]
                 ]
             }
         })
     },
     {
         id: "Crafting",
-        gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 1,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
-        }),
+        gameplayWeight: getGameplayWeights(1),
         mods: getModifierOptions({
             options: {
                 attributes: [
@@ -260,11 +282,7 @@ const skillDefinitions = getSkills([
     },
     {
         id: "Build",
-        gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 1,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
-        }),
+        gameplayWeight: getGameplayWeights(1),
         mods: getModifierOptions({
             options: {
                 attributes: [

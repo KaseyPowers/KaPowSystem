@@ -43,8 +43,8 @@ const BaseStatsArr: BaseStat[] = [
         mods: getModifierOptions({
             options: {
                 attributes: [
-                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.finesse],
-                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.finesse]
+                    attributeIdByPart[AttributeLocation.physical][AttributeCategory.speed],
+                    attributeIdByPart[AttributeLocation.mental][AttributeCategory.speed]
                 ]
             }
         })

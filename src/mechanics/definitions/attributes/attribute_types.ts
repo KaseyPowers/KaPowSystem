@@ -7,7 +7,7 @@ export enum AttributeLocation {
 }
 export enum AttributeCategory {
     power = "Power",
-    finesse = "Finesse",
+    speed = "Speed",
     awareness = "Awareness",
     resilience = "Resilience"
 };

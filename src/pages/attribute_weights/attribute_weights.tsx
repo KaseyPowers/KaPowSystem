@@ -1,9 +1,28 @@
-import { Container, Grid, Typography, Stack } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Typography,
+  Stack,
+  Card,
+  Divider,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import { AttributesCard, BaseStatsCard, SkillsCard } from "../../components";
+import {
+  AttributesCardContent,
+  BaseStatsCardContent,
+  SkillsCardContent,
+} from "../../components";
 
-import ComparisonsTableCard from "./comparison_table_card";
-import WeightsTableCard from "./weights_table_card";
+import { ComparisonsTableCard, WeightsTableCard } from "./components";
+
+const CardDivider = styled(Divider)(({ theme }) => {
+  const marginY = theme.spacing(1);
+  return {
+    marginTop: marginY,
+    marginBottom: marginY,
+  };
+});
 
 export function AttributeWeights() {
   return (
@@ -13,18 +32,16 @@ export function AttributeWeights() {
       </Typography>
       <Grid container spacing={2} alignItems="flex-start">
         <Grid item xs={3}>
-          <Stack
-            direction="column"
-            justifyContent="flex-start"
-            alignItems="stretch"
-            spacing={2}
-          >
-            <AttributesCard />
-            <BaseStatsCard />
-          </Stack>
+          <Card>
+            <AttributesCardContent expandable defaultExpanded />
+            <CardDivider />
+            <BaseStatsCardContent expandable defaultExpanded={false} />
+            <CardDivider />
+            <SkillsCardContent expandable defaultExpanded={false} />
+          </Card>
         </Grid>
         <Grid item xs={3}>
-          <SkillsCard />
+          <div>TODO: Next</div>
         </Grid>
         <Grid item xs={6}>
           <Stack

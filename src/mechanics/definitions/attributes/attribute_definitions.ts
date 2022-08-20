@@ -9,19 +9,19 @@ type AttributePartsObj<T> = Record<AttributeLocation, Record<AttributeCategory, 
 const AttributeDefinitionsByType: AttributePartsObj<AttributeDefinition> = {
     [AttributeLocation.physical]: {
         [AttributeCategory.power]: { id: "STR", name: "Strength", description: "Test Strength Description, Test Strength Description, Test Strength Description" },
-        [AttributeCategory.finesse]: { id: "AGL", name: "Agility" },
+        [AttributeCategory.speed]: { id: "AGL", name: "Agility" },
         [AttributeCategory.awareness]: { id: "DEX", name: "Dexterity" },
         [AttributeCategory.resilience]: { id: "STM", name: "Stamina" },
     },
     [AttributeLocation.mental]: {
         [AttributeCategory.power]: { id: "INT", name: "Intelligence" },
-        [AttributeCategory.finesse]: { id: "WIT", name: "Wit" /* Other options: Creativity, Cleverness */, },
+        [AttributeCategory.speed]: { id: "WIT", name: "Wit" /* Other options: Creativity, Cleverness */, },
         [AttributeCategory.awareness]: { id: "PER", name: "Perception" },
         [AttributeCategory.resilience]: { id: "FCS", name: "Focus" },
     },
     [AttributeLocation.social]: {
         [AttributeCategory.power]: { id: "CONF", name: "Confidence" },
-        [AttributeCategory.finesse]: { id: "CHRM", name: "Charm" },
+        [AttributeCategory.speed]: { id: "CHRM", name: "Charm" },
         [AttributeCategory.awareness]: { id: "INS", name: "Insight" },
         [AttributeCategory.resilience]: { id: "WILL", name: "Willpower" },
     },

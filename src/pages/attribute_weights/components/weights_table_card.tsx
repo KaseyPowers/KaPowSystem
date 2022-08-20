@@ -17,9 +17,9 @@ import {
   attributes,
   attributeLocationValues,
   attributeCategoryValues,
-} from "../../mechanics";
+} from "../../../mechanics";
 
-import attributeWeights from "./weights_context";
+import attributeWeights from "../weights_context";
 
 function weightTotalStr({ min, max }: { min: number; max: number }): string {
   return (min === max ? [max] : [max, min]).join(" - ");

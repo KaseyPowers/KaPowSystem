@@ -1,8 +1,9 @@
-import { Card, CardContent, CardHeader } from "@mui/material";
+import { Card } from "@mui/material";
 
 import { skillIds, skills, getModifierString, attributes } from "../mechanics";
 
-import { DefinitionDataItem, DefinitionList } from "./definitions_list";
+import type { DefinitionDataItem } from "./definitions_list";
+import { ListCardContent, StandardContentProps } from "./card_content";
 
 const listData: DefinitionDataItem[] = skillIds.map((id) => {
   const skill = skills[id];
@@ -15,14 +16,14 @@ const listData: DefinitionDataItem[] = skillIds.map((id) => {
   };
 });
 
-// defining the different sizes for different levels of definitions
-export function SkillsCard() {
+export function SkillsCardContent(props: StandardContentProps) {
+  return <ListCardContent title="Skills" listData={listData} {...props} />;
+}
+
+export function SkillsCard(props: StandardContentProps) {
   return (
     <Card>
-      <CardHeader title="Skills" sx={{ paddingBottom: 0 }} />
-      <CardContent sx={{ paddingTop: 0 }}>
-        <DefinitionList listData={listData} />
-      </CardContent>
+      <SkillsCardContent {...props} />
     </Card>
   );
 }
