@@ -11,7 +11,13 @@ import {
 
 import { IDefinitionItem, DescriptionItemOptions } from "./definition_types";
 
-function DefinitionItemContent({ item }: { item: IDefinitionItem }) {
+function DefinitionItemContent({
+  item,
+  smallSecondary,
+}: {
+  item: IDefinitionItem;
+  smallSecondary: boolean;
+}) {
   const { primary, secondary, caption } = item;
   const primaryTxt = (
     <Typography variant="subtitle1" component="span">
@@ -19,7 +25,10 @@ function DefinitionItemContent({ item }: { item: IDefinitionItem }) {
     </Typography>
   );
   const secondaryTxt = secondary && (
-    <Typography variant="subtitle2" component="span">
+    <Typography
+      variant={smallSecondary ? "caption" : "subtitle2"}
+      component="span"
+    >
       {secondary}
     </Typography>
   );
@@ -67,6 +76,7 @@ interface DefinitionItemProps extends DescriptionItemOptions {
 export default function DefinitionItem({
   item,
   showItemDefinitions,
+  smallSecondary,
 }: DefinitionItemProps) {
   const canShowDefinition: boolean = showItemDefinitions && !!item.definition;
   const [definitionOpen, setDefinitionOpen] = useState(false);
@@ -76,7 +86,9 @@ export default function DefinitionItem({
     }
   };
 
-  const content = <DefinitionItemContent item={item} />;
+  const content = (
+    <DefinitionItemContent item={item} smallSecondary={smallSecondary} />
+  );
 
   return (
     <>

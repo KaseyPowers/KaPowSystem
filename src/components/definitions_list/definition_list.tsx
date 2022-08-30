@@ -47,6 +47,7 @@ export function DefinitionList({ listData, ...options }: DefinitionListProps) {
   const optionProps = {
     groupStyle: GroupStyleTypes.divider,
     showItemDefinitions: false,
+    smallSecondary: false,
     ...options,
   };
   return (

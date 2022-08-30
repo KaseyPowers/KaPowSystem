@@ -9,10 +9,11 @@ import {
   TableRow,
   TableCell,
   TableProps,
-  TableCellProps,
   Tooltip,
 } from "@mui/material";
-import { styled, darken, alpha, lighten } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+
+import { BorderTableCell } from "./border_cell";
 
 import {
   attributeIdByPart,
@@ -22,7 +23,7 @@ import {
   attributeCategoryValues,
 } from "../../../mechanics";
 
-import attributeWeights from "../weights_context";
+import { comparisonCounts } from "../weight_logic";
 
 type AttributeId = Attribute["id"];
 
@@ -60,20 +61,6 @@ const ComparisonTable = styled(Table)<TableProps>(() => {
   };
 });
 
-const ComparisonTableCell = styled(TableCell)<TableCellProps>(({ theme }) => {
-  const color =
-    theme.palette.mode === "light"
-      ? lighten(alpha(theme.palette.divider, 1), 0.88)
-      : darken(alpha(theme.palette.divider, 1), 0.68);
-  const borderStr = `1px solid ${color}`;
-  return {
-    borderLeft: borderStr,
-    "&:last-child": {
-      borderRight: borderStr,
-    },
-  };
-});
-
 // defining the different sizes for different levels of definitions
 export default function ComparisonsTableCard() {
   return (
@@ -85,9 +72,9 @@ export default function ComparisonsTableCard() {
             <TableRow>
               <TableCell />
               {attributeIds.map((id) => (
-                <ComparisonTableCell key={id} align="center" variant="head">
+                <BorderTableCell key={id} align="center" variant="head">
                   {attributes[id].shorthand}
-                </ComparisonTableCell>
+                </BorderTableCell>
               ))}
             </TableRow>
           </TableHead>
@@ -105,12 +92,11 @@ export default function ComparisonsTableCard() {
                       displayStr = "X";
                       isFirstHalf = false;
                     } else if (isFirstHalf) {
-                      const val =
-                        attributeWeights.comparisonsCount[id][otherId];
+                      const val = comparisonCounts[id][otherId];
                       displayStr = val ? val.toString() : "_";
                     }
                     return (
-                      <ComparisonTableCell key={otherId} align="center">
+                      <BorderTableCell key={otherId} align="center">
                         {displayStr && (
                           <Tooltip
                             placement="top-start"
@@ -123,7 +109,7 @@ export default function ComparisonsTableCard() {
                             <div>{displayStr}</div>
                           </Tooltip>
                         )}
-                      </ComparisonTableCell>
+                      </BorderTableCell>
                     );
                   })}
                 </TableRow>

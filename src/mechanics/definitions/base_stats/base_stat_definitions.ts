@@ -6,21 +6,13 @@ import { AttributeLocation, AttributeCategory, attributeIdByPart } from "../attr
 
 import { BaseStat } from "./base_stat_types";
 
-type BaseStatDefinition = OptionalKeysObject<BaseStat, "name">
-
-function getBaseStat(definition: BaseStatDefinition): Readonly<BaseStat> {
-    return {
-        ...definition,
-        name: definition.name || definition.id,
-    };
-}
-
 /** Define outputs */
 type BaseStatId = BaseStat["id"];
 
+type BaseStatDefinition = OptionalKeysObject<BaseStat, "name">
 
-const BaseStatsArr: BaseStat[] = [
-    getBaseStat({
+const baseStatsDefinitionArr: BaseStatDefinition[] = [
+    {
         id: "HP",
         description: "HP is based on Stamina and Willpower. This represents the ability to shrug off damage, as well as the willpower to keep going while hurt",
         gameplayWeight: getGameplayWeights({
@@ -34,8 +26,8 @@ const BaseStatsArr: BaseStat[] = [
                 ]
             }
         }, ModifierComparison.sum)
-    }),
-    getBaseStat({
+    },
+    {
         id: "Initiative",
         gameplayWeight: getGameplayWeights({
             [GeneralGameplayType.combat]: 1
@@ -48,19 +40,27 @@ const BaseStatsArr: BaseStat[] = [
                 ]
             }
         })
-    })
+    }
 ];
 
-/** Tracking ids in the order defined */
-const baseStatIds: BaseStatId[] = []
-const baseStats: Record<BaseStatId, BaseStat> = BaseStatsArr.reduce((output, stat) => {
+function getBaseStat(input: BaseStatDefinition): Readonly<BaseStat> {
+    return {
+        ...input,
+        name: input.name || input.id
+    };
+}
+
+const baseStatIds: BaseStatId[] = [];
+const baseStats: Record<BaseStatId, BaseStat> = {};
+
+baseStatsDefinitionArr.forEach(definition => {
+    const stat = getBaseStat(definition);
     const id = stat.id;
     baseStatIds.push(id);
-    output[id] = stat;
-    return output;
-}, {} as Record<BaseStatId, BaseStat>);
+    baseStats[id] = stat;
+});
 
 export {
     baseStatIds,
-    baseStats,
+    baseStats
 };

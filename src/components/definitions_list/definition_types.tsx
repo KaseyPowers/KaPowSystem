@@ -23,6 +23,7 @@ export enum GroupStyleTypes {
 }
 
 export interface DescriptionItemOptions {
+  smallSecondary: boolean;
   showItemDefinitions: boolean;
 }
 

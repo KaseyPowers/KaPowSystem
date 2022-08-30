@@ -12,6 +12,7 @@ import {
   AttributesCardContent,
   BaseStatsCardContent,
   SkillsCardContent,
+  SavingThrowCardContent,
 } from "../../components";
 
 import { ComparisonsTableCard, WeightsTableCard } from "./components";
@@ -37,20 +38,24 @@ export function AttributeWeights() {
             <CardDivider />
             <BaseStatsCardContent expandable defaultExpanded={false} />
             <CardDivider />
+            <SavingThrowCardContent expandable defaultExpanded={false} />
+            <CardDivider />
             <SkillsCardContent expandable defaultExpanded={false} />
           </Card>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={5}>
           <div>TODO: Next</div>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
           <Stack
             direction="column"
             justifyContent="flex-start"
             alignItems="stretch"
             spacing={2}
           >
-            <WeightsTableCard />
+            <WeightsTableCard showTotal={true} />
+            <WeightsTableCard showTotal={false} />
+
             <ComparisonsTableCard />
           </Stack>
         </Grid>

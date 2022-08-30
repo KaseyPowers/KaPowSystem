@@ -22,6 +22,8 @@ interface WeightTotal {
     min: number
 }
 
+export type GameplayWeightTotal = Record<GeneralGameplayType, WeightTotal>;
+
 class AttributeWeights {
     comparisonsCount: Record<AttributeId, Record<AttributeId, number>> = {};
 
@@ -45,7 +47,7 @@ class AttributeWeights {
         }
     }
 
-    weightTotals: Record<AttributeId, Record<GeneralGameplayType, WeightTotal>> = {};
+    weightTotals: Record<AttributeId, GameplayWeightTotal> = {};
 
     addSingleWeight(attribute: AttributeId, optional: boolean, weight: GameplayWeights) {
         gameplayTypeValues.forEach(type => {

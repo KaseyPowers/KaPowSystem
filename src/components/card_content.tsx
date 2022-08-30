@@ -10,6 +10,7 @@ export interface ListCardContentProps {
   listData: DefinitionDataItem[];
   expandable?: boolean;
   defaultExpanded?: boolean;
+  listProps?: Omit<React.ComponentProps<typeof DefinitionList>, "listData">;
 }
 
 export type StandardContentProps = Omit<
@@ -22,6 +23,7 @@ export function ListCardContent({
   listData,
   expandable = false,
   defaultExpanded = false,
+  listProps,
 }: ListCardContentProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const onExpandedClick = () => {
@@ -30,7 +32,7 @@ export function ListCardContent({
 
   const cardContent = (
     <CardContent>
-      <DefinitionList listData={listData} />
+      <DefinitionList {...listProps} listData={listData} />
     </CardContent>
   );
 
