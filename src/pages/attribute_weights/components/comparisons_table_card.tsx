@@ -17,7 +17,7 @@ import { BorderTableCell } from "./border_cell";
 
 import {
   attributeIdByPart,
-  attributes,
+  attributesObj,
   Attribute,
   attributeLocationValues,
   attributeCategoryValues,
@@ -73,7 +73,7 @@ export default function ComparisonsTableCard() {
               <TableCell />
               {attributeIds.map((id) => (
                 <BorderTableCell key={id} align="center" variant="head">
-                  {attributes[id].shorthand}
+                  {attributesObj[id].shorthand}
                 </BorderTableCell>
               ))}
             </TableRow>
@@ -84,7 +84,7 @@ export default function ComparisonsTableCard() {
               return (
                 <TableRow key={id}>
                   <TableCell variant="head" component="th">
-                    {attributes[id].shorthand}
+                    {attributesObj[id].shorthand}
                   </TableCell>
                   {attributeIds.map((otherId) => {
                     let displayStr: string = "";
@@ -101,9 +101,9 @@ export default function ComparisonsTableCard() {
                           <Tooltip
                             placement="top-start"
                             title={
-                              attributes[id].name +
+                              attributesObj[id].name +
                               "-" +
-                              attributes[otherId].name
+                              attributesObj[otherId].name
                             }
                           >
                             <div>{displayStr}</div>

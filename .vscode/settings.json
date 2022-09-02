@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "jest.jestCommandLine": "npm run test --"
+  "jest.jestCommandLine": "npm test --"
 }

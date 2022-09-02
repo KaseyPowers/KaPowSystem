@@ -1,23 +1,22 @@
-import { OptionalKeysObject } from "../../../utils";
+import { MakeKeyOptional } from "../../../utils";
+import { BaseGameplayElement, getGameplayWeights, GameplayType, getModifierOptions, AttributeLocation, AttributeCategory } from "../../types";
+import { attributeIdByPart } from "../attributes";
 
-import { GeneralGameplayType, getGameplayWeights, getModifierOptions } from "../../common";
+type Skill = BaseGameplayElement;
 
-import { AttributeLocation, AttributeCategory, attributeIdByPart } from "../attributes";
+type SkillDefinition = MakeKeyOptional<Skill, "type" | "name" | "level">;
 
-import { Skill } from "./skill_types";
-
-type SkillDefinition = OptionalKeysObject<Skill, "name" | "level">;
+interface SkillGroup extends SkillDefinition {
+    children: (Pick<SkillDefinition, "id"> & Partial<Omit<SkillDefinition, "id">>)[]
+}
 
 function getSkill(input: SkillDefinition): Readonly<Skill> {
     return {
         ...input,
+        type: "skill",
         name: input.name || input.id,
         level: 0
     };
-}
-
-interface SkillGroup extends SkillDefinition {
-    children: (Pick<SkillDefinition, "id"> & Partial<Omit<SkillDefinition, "id">>)[]
 }
 
 function getSkillGroup(input: SkillGroup): Readonly<Skill>[] {
@@ -45,13 +44,13 @@ function getSkills(input: (SkillDefinition | SkillGroup)[]): Readonly<Skill>[] {
     return output;
 }
 
-const skillDefinitions = getSkills([
+const skills: Skill[] = getSkills([
     {
         id: "Accuracy",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 2,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 2,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -77,9 +76,9 @@ const skillDefinitions = getSkills([
     {
         id: "Athletics",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 1,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 1,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -94,9 +93,9 @@ const skillDefinitions = getSkills([
         id: "sleight",
         name: "Sleight of Hand",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 2
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 2
         }),
         mods: getModifierOptions({
             options: {
@@ -110,9 +109,9 @@ const skillDefinitions = getSkills([
     {
         id: "Acrobatics",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0.25,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0.25,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -126,9 +125,9 @@ const skillDefinitions = getSkills([
     {
         id: "Investigation",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0.25,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0.25,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -142,9 +141,9 @@ const skillDefinitions = getSkills([
     {
         id: "Intimidate",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 0,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 0,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -158,9 +157,9 @@ const skillDefinitions = getSkills([
     {
         id: "Deception",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 0,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 0,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -175,9 +174,9 @@ const skillDefinitions = getSkills([
         id: "motive",
         name: "Sense Motive",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 0,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 0,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -191,9 +190,9 @@ const skillDefinitions = getSkills([
     {
         id: "Persuasion",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 0,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 0,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -208,9 +207,9 @@ const skillDefinitions = getSkills([
         id: "knowledge",
         name: "Knowledge - todo more",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0.25,
-            [GeneralGameplayType.exploration]: 0.75,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0.25,
+            [GameplayType.exploration]: 0.75,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -295,9 +294,9 @@ const skillDefinitions = getSkills([
     {
         id: "Surival",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 2,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 2,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -312,9 +311,9 @@ const skillDefinitions = getSkills([
         id: "animals",
         name: "Animal Handling",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -329,9 +328,9 @@ const skillDefinitions = getSkills([
         id: "plants",
         name: "Plant Handling",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -345,9 +344,9 @@ const skillDefinitions = getSkills([
     {
         id: "Forcasting",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 1,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 1,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -361,9 +360,9 @@ const skillDefinitions = getSkills([
     {
         id: "Navigation",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0,
-            [GeneralGameplayType.exploration]: 2,
-            [GeneralGameplayType.social]: 0.5
+            [GameplayType.combat]: 0,
+            [GameplayType.exploration]: 2,
+            [GameplayType.social]: 0.5
         }),
         mods: getModifierOptions({
             options: {
@@ -377,9 +376,9 @@ const skillDefinitions = getSkills([
     {
         id: "Vehicles",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 0.5,
-            [GeneralGameplayType.exploration]: 2,
-            [GeneralGameplayType.social]: 1
+            [GameplayType.combat]: 0.5,
+            [GameplayType.exploration]: 2,
+            [GameplayType.social]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -391,18 +390,14 @@ const skillDefinitions = getSkills([
         })
     },
 ]);
-
 type SkillId = Skill["id"];
 
-const skillIds: SkillId[] = [];
-const skills: Record<SkillId, Skill> = skillDefinitions.reduce((output, skill) => {
-    const id = skill.id;
-    skillIds.push(id);
-    output[id] = skill;
+const skillsObj = skills.reduce((output, skill) => {
+    output[skill.id] = skill;
     return output;
 }, {} as Record<SkillId, Skill>);
 
 export {
-    skillIds,
-    skills
+    skills,
+    skillsObj
 };

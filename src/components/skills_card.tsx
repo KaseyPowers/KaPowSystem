@@ -1,17 +1,15 @@
 import { Card } from "@mui/material";
 
-import { skillIds, skills, getModifierString, attributes } from "../mechanics";
+import { skills, getModifierString, attributesObj } from "../mechanics";
 
 import type { DefinitionDataItem } from "./definitions_list";
 import { ListCardContent, StandardContentProps } from "./card_content";
 
-const listData: DefinitionDataItem[] = skillIds.map((id) => {
-  const skill = skills[id];
-
+const listData: DefinitionDataItem[] = skills.map((skill) => {
   return {
-    id,
+    id: skill.id,
     primary: skill.name,
-    caption: getModifierString(skill.mods, (id) => attributes[id].shorthand),
+    caption: getModifierString(skill.mods, (id) => attributesObj[id].shorthand),
     definition: skill.description,
   };
 });

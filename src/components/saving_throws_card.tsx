@@ -2,11 +2,11 @@ import { Card } from "@mui/material";
 
 import {
   savingThrowIdByPart,
-  savingThrows,
+  savingThrowsObj,
   getModifierString,
   attributeLocationValues,
   savingThrowCategoryValues,
-  attributes,
+  attributesObj,
 } from "../mechanics";
 
 import type { DefinitionDataItem } from "./definitions_list";
@@ -17,7 +17,7 @@ const listData: DefinitionDataItem[] = [];
 attributeLocationValues.forEach((location) => {
   savingThrowCategoryValues.forEach((category) => {
     const id = savingThrowIdByPart[location][category];
-    const savingThrow = savingThrows[id];
+    const savingThrow = savingThrowsObj[id];
 
     listData.push({
       id,
@@ -25,7 +25,7 @@ attributeLocationValues.forEach((location) => {
       secondary: [location, category].join("-"),
       caption: getModifierString(
         savingThrow.mods,
-        (id) => attributes[id].shorthand
+        (id) => attributesObj[id].shorthand
       ),
       definition: savingThrow.description,
     });

@@ -1,5 +1,5 @@
 import {
-    ModifierParts,
+    ModifierPart,
     ModifierComparison,
     Attribute,
     attributes,
@@ -8,7 +8,8 @@ import {
 import adder from "./adder";
 
 type AttributeId = Attribute["id"];
-const allAttributeIds = Object.keys(attributes);
+const allAttributeIds = attributes.map(attr => attr.id);
+
 
 function getCounts() {
     const counts: Record<AttributeId, Record<AttributeId, number>> = {};
@@ -19,13 +20,13 @@ function getCounts() {
         });
     });
 
-    function addModifierComparisons(attributes: ModifierParts) {
-        const { parts, mod } = attributes;
+    function addModifierComparisons(attributes: ModifierPart) {
+        const { ids, mod } = attributes;
 
         // sum comparisons use all, so won't be comparing
         if (mod !== ModifierComparison.sum) {
-            parts.forEach(partA => {
-                parts.forEach(partB => {
+            ids.forEach(partA => {
+                ids.forEach(partB => {
                     // skip self-comparison
                     if (partA !== partB) {
                         counts[partA][partB] += 1;

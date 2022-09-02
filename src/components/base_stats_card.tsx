@@ -1,22 +1,15 @@
 import { Card } from "@mui/material";
 
-import {
-  baseStatIds,
-  baseStats,
-  getModifierString,
-  attributes,
-} from "../mechanics";
+import { baseStats, getModifierString, attributesObj } from "../mechanics";
 
 import type { DefinitionDataItem } from "./definitions_list";
 import { ListCardContent, StandardContentProps } from "./card_content";
 
-const listData: DefinitionDataItem[] = baseStatIds.map((id) => {
-  const stat = baseStats[id];
-
+const listData: DefinitionDataItem[] = baseStats.map((stat) => {
   return {
-    id,
+    id: stat.id,
     primary: stat.name,
-    caption: getModifierString(stat.mods, (id) => attributes[id].shorthand),
+    caption: getModifierString(stat.mods, (id) => attributesObj[id].shorthand),
     definition: stat.description,
   };
 });

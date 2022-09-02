@@ -1,14 +1,14 @@
 import {
     Attribute,
     attributes,
-    GeneralGameplayType
+    GameplayType
 } from "../../../mechanics";
 
 import { getWeightTotals, AttributeRanks } from "./total_weights";
 
 type AttributeId = Attribute["id"];
 const allAttributeIds = Object.keys(attributes);
-const gameplayTypeValues = Object.values(GeneralGameplayType);
+const gameplayTypeValues = Object.values(GameplayType);
 
 describe("Attribute weights", () => {
     const defaultWeights = getWeightTotals();

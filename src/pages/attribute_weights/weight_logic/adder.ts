@@ -2,7 +2,7 @@
 
 import {
     GameplayWeights,
-    ModifierParts,
+    ModifierPart,
     baseStats,
     savingThrows,
     skills
@@ -13,7 +13,7 @@ type onAddFn = ({
     weights, attributes
 }: {
     weights: GameplayWeights,
-    attributes: ModifierParts
+    attributes: ModifierPart
 }) => void;
 
 
@@ -24,8 +24,7 @@ interface adderOptions {
 
 export default function adder(options: adderOptions) {
 
-    Object.keys(baseStats).forEach(statId => {
-        const stat = baseStats[statId];
+    baseStats.forEach(stat => {
         const { gameplayWeight, mods } = stat;
         options.onAdd({
             weights: gameplayWeight,
@@ -33,17 +32,15 @@ export default function adder(options: adderOptions) {
         });
     });
 
-    Object.keys(savingThrows).forEach(throwId => {
-        const stat = savingThrows[throwId];
-        const { gameplayWeight, mods } = stat;
+    savingThrows.forEach(savingThrow => {
+        const { gameplayWeight, mods } = savingThrow;
         options.onAdd({
             weights: gameplayWeight,
             attributes: mods.options.attributes
         });
     });
 
-    Object.keys(skills).forEach(skillId => {
-        const skill = skills[skillId];
+    skills.forEach(skill => {
         const { gameplayWeight, mods } = skill;
         options.onAdd({
             weights: gameplayWeight,

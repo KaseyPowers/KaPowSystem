@@ -1,7 +1,8 @@
 import {
-    GeneralGameplayType,
+    GameplayType,
+    gameplayTypeValues,
     GameplayWeights,
-    ModifierParts,
+    ModifierPart,
     ModifierComparison,
     Attribute,
     attributes,
@@ -10,7 +11,7 @@ import {
 import adder from "./adder";
 
 type AttributeId = Attribute["id"];
-const allAttributeIds = Object.keys(attributes);
+const allAttributeIds = attributes.map(attr => attr.id);
 
 export type AttributeRanks = Record<AttributeId, number>;
 
@@ -19,14 +20,13 @@ const defaultRanks = allAttributeIds.reduce((output, id) => {
     return output;
 }, {} as AttributeRanks);
 
-const gameplayTypeValues = Object.values(GeneralGameplayType);
 
 export interface GameplayWeightItem {
     min: number,
     max: number,
     total: number
 };
-export type GameplayWeightObj = Record<GeneralGameplayType, GameplayWeightItem>;
+export type GameplayWeightObj = Record<GameplayType, GameplayWeightItem>;
 export type GameplayWeightById = Record<AttributeId, GameplayWeightObj>;
 
 // calculate the weights for each attribute
@@ -47,34 +47,34 @@ export function getWeightTotals(ranks: AttributeRanks = defaultRanks) {
         }, {} as GameplayWeightObj);
     });
 
-    function addTotal(attributeId: string, type: GeneralGameplayType, item: number | GameplayWeightItem) {
+    function addTotal(attributeId: string, type: GameplayType, item: number | GameplayWeightItem) {
         const isNumber = typeof item === "number";
         weightTotals[attributeId][type].min += isNumber ? item : item.min;
         weightTotals[attributeId][type].max += isNumber ? item : item.max;
         weightTotals[attributeId][type].total += isNumber ? item : item.total;
     }
 
-    function addModifiers(attributes: ModifierParts, weight: GameplayWeights) {
-        const { parts, mod } = attributes;
+    function addModifiers(attributes: ModifierPart, weight: GameplayWeights) {
+        const { ids, mod } = attributes;
         // Sum modifiers will apply the same to each part, the others will apply to one of them
         const toCompare = mod !== ModifierComparison.sum;
 
-        let useParts: string[] = [];
+        let useIds: string[] = [];
         if (!toCompare) {
-            useParts = parts;
+            useIds = ids;
         } else {
-            parts.forEach(id => {
-                if (useParts.length <= 0) {
-                    useParts.push(id);
+            ids.forEach(id => {
+                if (useIds.length <= 0) {
+                    useIds.push(id);
                 } else {
-                    const currentRank = ranks[useParts[0]];
+                    const currentRank = ranks[useIds[0]];
                     const newRank = ranks[id];
                     // if higher, reset the array
                     if (newRank > currentRank) {
-                        useParts = [id];
+                        useIds = [id];
                     } else if (newRank === currentRank) {
                         // if matching, add to the list
-                        useParts.push(id);
+                        useIds.push(id);
                     }
                     // if lower, do nothing
                 }
@@ -84,8 +84,8 @@ export function getWeightTotals(ranks: AttributeRanks = defaultRanks) {
         gameplayTypeValues.forEach(type => {
             const val = weight[type];
             // for a single item, will add full value, regardless of comparisons or not
-            if (useParts.length === 1) {
-                addTotal(useParts[0], type, val);
+            if (useIds.length === 1) {
+                addTotal(useIds[0], type, val);
             } else {
                 // val defaults to full val
                 let useVal: number | GameplayWeightItem = val;
@@ -94,11 +94,11 @@ export function getWeightTotals(ranks: AttributeRanks = defaultRanks) {
                     useVal = {
                         max: val,
                         min: 0,
-                        total: (val / useParts.length)
+                        total: (val / useIds.length)
                     }
                 }
 
-                useParts.forEach(id => {
+                useIds.forEach(id => {
                     addTotal(id, type, useVal);
                 });
             }

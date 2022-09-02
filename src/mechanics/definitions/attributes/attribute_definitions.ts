@@ -1,9 +1,5 @@
-import { OptionalKeysObject } from "../../../utils";
-import { AttributeLocation, attributeLocationValues, AttributeCategory, attributeCategoryValues, Attribute } from "./attribute_types";
-
-type AttributeDefinition = OptionalKeysObject<Attribute, "location" | "category" | "shorthand">
-
-type AttributePartsObj<T> = Record<AttributeLocation, Record<AttributeCategory, T>>;
+import { AttributeLocation, attributeLocationValues, AttributeCategory, attributeCategoryValues, Attribute } from "../../types";
+import { AttributePartsObj, AttributeDefinition, getAttribute } from "./attribute_definition_types";
 
 // define the basic values here
 const AttributeDefinitionsByType: AttributePartsObj<AttributeDefinition> = {
@@ -40,29 +36,18 @@ const AttributeDefinitionsByType: AttributePartsObj<AttributeDefinition> = {
 
 type AttributeId = Attribute["id"];
 // object of attributes mapped by id
-const attributes: Record<AttributeId, Attribute> = {};
-// const AttributeIdByPartShorthand = new Map<AttributePartShorthand, AttributeId>();
-
+const attributes: Attribute[] = [];
+const attributesObj: Record<AttributeId, Attribute> = {};
 type AttributeIdByPartType = AttributePartsObj<AttributeId>;
 
-
-function getAttribute(input: AttributeDefinition, location: AttributeLocation, category: AttributeCategory): Readonly<Attribute> {
-    return {
-        ...input,
-        id: input.id.toLowerCase(),
-        shorthand: (input.shorthand || input.id).toUpperCase(),
-        location,
-        category
-    };
-}
 
 const attributeIdByPart: AttributeIdByPartType = attributeLocationValues.reduce((locOutput, location) => {
     locOutput[location] = attributeCategoryValues.reduce((categoryOutput, category) => {
         const definition = AttributeDefinitionsByType[location][category];
-
         const attribute = getAttribute(definition, location, category);
         const id = attribute.id;
-        attributes[id] = attribute;
+        attributes.push(attribute);
+        attributesObj[id] = attribute;
         categoryOutput[category] = id;
         return categoryOutput;
     }, {} as Record<AttributeCategory, AttributeId>);
@@ -72,5 +57,6 @@ const attributeIdByPart: AttributeIdByPartType = attributeLocationValues.reduce(
 
 export {
     attributes,
+    attributesObj,
     attributeIdByPart,
 };

@@ -1,22 +1,20 @@
-import { attributeLocationValues, attributeCategoryValues } from "./attribute_types";
+import { attributeLocationValues, attributeCategoryValues } from "../../types";
 import {
     attributes,
-    // AttributeIdByPartShorthand
 } from "./attribute_definitions";
 
 const expectedCombinations = attributeLocationValues.length * attributeCategoryValues.length;
-const attributeKeys = Object.keys(attributes);
 
 describe("Attribute definitions", () => {
     // this will confirm that the shorthand is unique as well since it's used as id
     test(`Should have ${expectedCombinations} attributes`, () => {
-        expect(attributeKeys.length).toBe(expectedCombinations);
+        expect(attributes.length).toBe(expectedCombinations);
     });
 
     test("Should have unique names", () => {
         const names = new Set<string>();
-        attributeKeys.forEach(key => {
-            const name = attributes[key].name;
+        attributes.forEach(attr => {
+            const name = attr.name;
             names.add(name);
         });
         // set is unique values, so there should be the same size of keys as names found

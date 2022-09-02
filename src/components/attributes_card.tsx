@@ -2,7 +2,7 @@ import { Card } from "@mui/material";
 
 import {
   attributeIdByPart,
-  attributes,
+  attributesObj,
   attributeLocationValues,
   attributeCategoryValues,
 } from "../mechanics";
@@ -17,7 +17,7 @@ const listData: DefinitionDataItem[] = attributeLocationValues.map(
       id: location,
       items: attributeCategoryValues.map((category) => {
         const id = locationAttriutes[category];
-        const attribute = attributes[id];
+        const attribute = attributesObj[id];
         return {
           id,
           primary: attribute.name,

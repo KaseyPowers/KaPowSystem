@@ -1,22 +1,26 @@
-import { OptionalKeysObject } from "../../../utils";
-
-import { GeneralGameplayType, getGameplayWeights, getModifierOptions, ModifierComparison } from "../../common";
-
-import { AttributeLocation, AttributeCategory, attributeIdByPart } from "../attributes";
-
-import { BaseStat } from "./base_stat_types";
+import { MakeKeyOptional } from "../../../utils";
+import { BaseGameplayElement, getGameplayWeights, GameplayType, getModifierOptions, ModifierComparison, AttributeLocation, AttributeCategory } from "../../types";
+import { attributeIdByPart } from "../attributes";
 
 /** Define outputs */
-type BaseStatId = BaseStat["id"];
+type BaseStatId = BaseGameplayElement["id"];
 
-type BaseStatDefinition = OptionalKeysObject<BaseStat, "name">
+type BaseStatDefinition = MakeKeyOptional<BaseGameplayElement, "type" | "name">;
+
+function getBaseStat(input: BaseStatDefinition): Readonly<BaseGameplayElement> {
+    return {
+        ...input,
+        type: "baseStat",
+        name: input.name || input.id
+    };
+}
 
 const baseStatsDefinitionArr: BaseStatDefinition[] = [
     {
         id: "HP",
         description: "HP is based on Stamina and Willpower. This represents the ability to shrug off damage, as well as the willpower to keep going while hurt",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 4
+            [GameplayType.combat]: 4
         }),
         mods: getModifierOptions({
             options: {
@@ -30,7 +34,7 @@ const baseStatsDefinitionArr: BaseStatDefinition[] = [
     {
         id: "Initiative",
         gameplayWeight: getGameplayWeights({
-            [GeneralGameplayType.combat]: 1
+            [GameplayType.combat]: 1
         }),
         mods: getModifierOptions({
             options: {
@@ -43,24 +47,16 @@ const baseStatsDefinitionArr: BaseStatDefinition[] = [
     }
 ];
 
-function getBaseStat(input: BaseStatDefinition): Readonly<BaseStat> {
-    return {
-        ...input,
-        name: input.name || input.id
-    };
-}
 
-const baseStatIds: BaseStatId[] = [];
-const baseStats: Record<BaseStatId, BaseStat> = {};
+const baseStatsObj: Record<BaseStatId, BaseGameplayElement> = {};
 
-baseStatsDefinitionArr.forEach(definition => {
-    const stat = getBaseStat(definition);
-    const id = stat.id;
-    baseStatIds.push(id);
-    baseStats[id] = stat;
+const baseStats: BaseGameplayElement[] = baseStatsDefinitionArr.map(def => {
+    const stat = getBaseStat(def);
+    baseStatsObj[stat.id] = stat;
+    return stat;
 });
 
 export {
-    baseStatIds,
-    baseStats
+    baseStats,
+    baseStatsObj
 };

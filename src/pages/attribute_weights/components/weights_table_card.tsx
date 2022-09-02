@@ -14,9 +14,9 @@ import {
 import { BorderTableCell } from "./border_cell";
 
 import {
-  gameplayTypes,
+  gameplayTypeValues,
   attributeIdByPart,
-  attributes,
+  attributesObj,
   attributeLocationValues,
   attributeCategoryValues,
 } from "../../../mechanics";
@@ -76,7 +76,7 @@ function getGameplayTotalCells({
 } & WeightsTableCellOptions) {
   const totalMinMax: GameplayWeightItem = { max: 0, min: 0, total: 0 };
 
-  const output = gameplayTypes.map((type) => {
+  const output = gameplayTypeValues.map((type) => {
     const weight = gameplayWeights[type];
     totalMinMax.min += weight.min;
     totalMinMax.max += weight.max;
@@ -103,7 +103,7 @@ type WeightsTableCardProps = {
 export default function WeightsTableCard({
   showTotal = true,
 }: WeightsTableCardProps) {
-  const gameplayTotals: GameplayWeightObj = gameplayTypes.reduce(
+  const gameplayTotals: GameplayWeightObj = gameplayTypeValues.reduce(
     (output, key) => {
       output[key] = {
         min: 0,
@@ -124,7 +124,7 @@ export default function WeightsTableCard({
         {attributeCategoryValues.map((category, index) => {
           const isFirst = index === 0;
           const id = locationAttriutes[category];
-          const attribute = attributes[id];
+          const attribute = attributesObj[id];
 
           const gameplayWeights = weightTotals[id];
 
@@ -164,14 +164,14 @@ export default function WeightsTableCard({
               <TableCell align="center" colSpan={2}>
                 Label
               </TableCell>
-              <TableCell align="center" colSpan={gameplayTypes.length + 1}>
+              <TableCell align="center" colSpan={gameplayTypeValues.length + 1}>
                 Weights
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell colSpan={2} />
               <TableCell align="center">Total</TableCell>
-              {gameplayTypes.map((prt) => (
+              {gameplayTypeValues.map((prt) => (
                 <TableCell
                   key={prt}
                   sx={{ textTransform: "capitalize" }}

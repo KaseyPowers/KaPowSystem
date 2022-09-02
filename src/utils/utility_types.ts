@@ -1,11 +1,4 @@
-export type ReplaceType<ObjType, ReplaceKeys extends keyof ObjType, ToType> = Omit<ObjType, ReplaceKeys> & {
-    [Property in ReplaceKeys]: ToType
-};
+// make keys required as needed
+export type MakeRequiredKey<T extends Object, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
 
-// export type OptionalKeysObject<ObjType, OptionalKeys extends keyof ObjType> = {
-//     [Property in Exclude<keyof ObjType, OptionalKeys>]: ObjType[Property]
-// } & {
-//         [Property in OptionalKeys]?: ObjType[Property]
-//     };
-
-export type OptionalKeysObject<ObjType, OptionalKeys extends keyof ObjType> = Omit<ObjType, OptionalKeys> & Partial<Pick<ObjType, OptionalKeys>>;
+export type MakeKeyOptional<T extends Object, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

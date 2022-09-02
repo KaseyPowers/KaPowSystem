@@ -1,9 +1,8 @@
-import { OptionalKeysObject } from "../../../utils";
-import { getGameplayWeights, getModifierOptions, ModifierComparison } from "../../common";
-import { attributeLocationValues, attributeIdByPart, AttributeLocation, AttributeCategory } from "../attributes";
-import { SavingThrow, SavingThrowCategory, savingThrowCategoryValues } from "./saving_throw_types";
+import { MakeKeyOptional } from "../../../utils";
+import { SavingThrow, SavingThrowCategory, savingThrowCategoryValues, getGameplayWeights, getModifierOptions, ModifierComparison, AttributeLocation, attributeLocationValues, AttributeCategory } from "../../types";
+import { attributeIdByPart } from "../attributes";
 
-type SavingThrowDefinition = OptionalKeysObject<SavingThrow, "id" | "location" | "category" | "shorthand">;
+type SavingThrowDefinition = MakeKeyOptional<SavingThrow, "id" | "type" | "location" | "category" | "shorthand">;
 
 type SavingThrowPartsObj<T> = Record<AttributeLocation, Record<SavingThrowCategory, T>>;
 
@@ -98,24 +97,25 @@ const SavingThrowDefinitionsByType: SavingThrowPartsObj<SavingThrowDefinition> =
 function getSavingThrow(input: SavingThrowDefinition, location: AttributeLocation, category: SavingThrowCategory): Readonly<SavingThrow> {
     return {
         ...input,
+        type: "savingThrow",
         id: (input.id || [location, category].join("-")).toLowerCase(),
         location,
         category
     };
 }
 
-
 type SavingThrowId = SavingThrow["id"];
-
-const savingThrows: Record<SavingThrowId, SavingThrow> = {};
 type SavingThrowIdByPart = SavingThrowPartsObj<SavingThrowId>;
 
+const savingThrows: SavingThrow[] = [];
+const savingThrowsObj: Record<SavingThrowId, SavingThrow> = {};
 const savingThrowIdByPart: SavingThrowIdByPart = attributeLocationValues.reduce((locOutput, location) => {
     locOutput[location] = savingThrowCategoryValues.reduce((categoryOutput, category) => {
         const definition = SavingThrowDefinitionsByType[location][category];
         const savingThrow = getSavingThrow(definition, location, category);
         const id = savingThrow.id;
-        savingThrows[id] = savingThrow;
+        savingThrows.push(savingThrow);
+        savingThrowsObj[id] = savingThrow;
         categoryOutput[category] = id;
         return categoryOutput;
     }, {} as Record<SavingThrowCategory, SavingThrowId>);
@@ -124,5 +124,6 @@ const savingThrowIdByPart: SavingThrowIdByPart = attributeLocationValues.reduce(
 
 export {
     savingThrows,
+    savingThrowsObj,
     savingThrowIdByPart
 };

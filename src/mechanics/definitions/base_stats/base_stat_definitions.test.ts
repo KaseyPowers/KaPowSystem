@@ -1,18 +1,18 @@
 import {
-    baseStatIds,
-    baseStats
+    baseStats,
+    baseStatsObj
 } from "./base_stat_definitions";
 
 describe("Base State definitions", () => {
 
-    test("Should have the right amount of ids", () => {
-        expect(baseStatIds).toHaveLength(Object.keys(baseStats).length);
+    test("Should have the matching array and object sizes", () => {
+        expect(baseStats).toHaveLength(Object.keys(baseStatsObj).length);
     });
 
     // confirm the stats object and ids are equal lenghts
     test("Should have matching ids and object keys", () => {
-        baseStatIds.forEach(id => {
-            expect(baseStats).toHaveProperty(id);
+        baseStats.forEach(stat => {
+            expect(baseStatsObj).toHaveProperty(stat.id, stat);
         });
     });
 

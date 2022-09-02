@@ -1,4 +1,6 @@
-import { BaseDefinition } from "../../common";
+import { BaseElement } from "./base";
+
+import { MakeRequiredKey } from "../../utils";
 
 export enum AttributeLocation {
     physical = "Physical",
@@ -15,13 +17,8 @@ export enum AttributeCategory {
 export const attributeLocationValues = Object.values(AttributeLocation);
 export const attributeCategoryValues = Object.values(AttributeCategory);
 
-type BaseRequiredShorthand = Omit<BaseDefinition, "shorthand"> & Required<Pick<BaseDefinition, "shorthand">>;
-export interface Attribute extends BaseRequiredShorthand {
-    /** Calculated from the location + type */
+export interface Attribute extends MakeRequiredKey<BaseElement, "shorthand"> {
+    /** Calculated from the location + category */
     location: AttributeLocation,
     category: AttributeCategory,
 }
-
-
-
-
