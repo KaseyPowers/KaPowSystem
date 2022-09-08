@@ -1,8 +1,8 @@
 import { MakeKeyOptional } from "../../../utils";
-import { SavingThrow, SavingThrowCategory, savingThrowCategoryValues, getGameplayWeights, getModifierOptions, ModifierComparison, AttributeLocation, attributeLocationValues, AttributeCategory } from "../../types";
+import { SavingThrow, SavingThrowCategory, savingThrowCategoryValues, getGameplayWeights, getModifierOptions, ModifierComparison, AttributeLocation, attributeLocationValues, AttributeCategory, ElementTypes } from "../../types";
 import { attributeIdByPart } from "../attributes";
 
-type SavingThrowDefinition = MakeKeyOptional<SavingThrow, "id" | "type" | "location" | "category" | "shorthand">;
+type SavingThrowDefinition = Omit<MakeKeyOptional<SavingThrow, "id" | "location" | "category" | "shorthand">, "type">
 
 type SavingThrowPartsObj<T> = Record<AttributeLocation, Record<SavingThrowCategory, T>>;
 
@@ -94,10 +94,15 @@ const SavingThrowDefinitionsByType: SavingThrowPartsObj<SavingThrowDefinition> =
     },
 };
 
+const type = ElementTypes.stat;
+const subType = "savingThrow";
+
 function getSavingThrow(input: SavingThrowDefinition, location: AttributeLocation, category: SavingThrowCategory): Readonly<SavingThrow> {
     return {
         ...input,
-        type: "savingThrow",
+        type,
+        subType,
+        tags: [type, subType, ...(input.tags || [])],
         id: (input.id || [location, category].join("-")).toLowerCase(),
         location,
         category

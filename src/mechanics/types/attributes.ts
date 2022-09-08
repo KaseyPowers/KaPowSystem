@@ -1,4 +1,4 @@
-import { BaseElement } from "./base";
+import { BaseElement, ElementTypes } from "./base";
 
 import { MakeRequiredKey } from "../../utils";
 
@@ -21,4 +21,5 @@ export interface Attribute extends MakeRequiredKey<BaseElement, "shorthand"> {
     /** Calculated from the location + category */
     location: AttributeLocation,
     category: AttributeCategory,
+    type: ElementTypes.ability
 }

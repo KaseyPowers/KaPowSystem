@@ -1,16 +1,22 @@
 import { MakeKeyOptional } from "../../../utils";
-import { BaseGameplayElement, getGameplayWeights, GameplayType, getModifierOptions, ModifierComparison, AttributeLocation, AttributeCategory } from "../../types";
+import { BaseGameplayElement, ElementTypes, getGameplayWeights, GameplayType, getModifierOptions, ModifierComparison, AttributeLocation, AttributeCategory } from "../../types";
 import { attributeIdByPart } from "../attributes";
 
 /** Define outputs */
 type BaseStatId = BaseGameplayElement["id"];
 
-type BaseStatDefinition = MakeKeyOptional<BaseGameplayElement, "type" | "name">;
+type BaseStatDefinition = Omit<MakeKeyOptional<BaseGameplayElement, "name" | "tags">, "type">
+
+
+const type = ElementTypes.stat;
+const subType = "baseStat";
 
 function getBaseStat(input: BaseStatDefinition): Readonly<BaseGameplayElement> {
     return {
         ...input,
-        type: "baseStat",
+        type,
+        subType,
+        tags: [type, subType, ...(input.tags || [])],
         name: input.name || input.id
     };
 }

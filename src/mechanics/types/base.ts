@@ -1,6 +1,20 @@
 
 import { GameplayWeights, ModifierOptions, Prerequisites } from "./sub_types";
 
+export enum ElementTypes {
+    /** Ability also could be changed to Feat or something else */
+    ability = "Ability",
+    /** Foundation feature of all characters */
+    attribute = "Attribute",
+    /** Stat - Could have a better name, basics that are derived from attributes but can't be leveled up */
+    stat = "Stat",
+    /** Base skills, more applied use of abilities. but can gain levels to get more proficient with */
+    skill = "Skill",
+    /** A type of skill too elaborate for a subType. Mostly focused on the use of certain tools. Ex. the various weapon proficencies  */
+    proficiency = "Proficiency",
+}
+
+
 /** The Basic structure for everything (pre-attribute) Most will build off of later Bases though */
 export interface BaseElement {
     /** Unique identifier, ideally unique for all definitions, minimum unique to the group it's in */
@@ -8,9 +22,11 @@ export interface BaseElement {
     /** The full diaply name for the object */
     name: string,
     /** Base type to help narrow down the full list, ex. "Attribute", "Skill", etc. */
-    type: string,
-    /** Descriptive tags, optional, will have uses for feats as well as items+proficiencies */
-    tags?: string[],
+    type: ElementTypes,
+    /** For more specific type definitions beyond the main type. Ex. Proficiency vs. "Weapon Proficicency" */
+    subType?: string,
+    /** Descriptive tags, optional, will have uses for feats as well as items+proficiencies. Will always include the type at minimum, to help with searching */
+    tags: string[],
     /** Optional abbreviation for quick references aka: Strength + STR */
     shorthand?: string,
     /** Full length description optional for now, but eventually should be required, might also support markdown for link references */

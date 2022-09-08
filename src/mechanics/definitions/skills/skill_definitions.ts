@@ -1,19 +1,22 @@
 import { MakeKeyOptional } from "../../../utils";
-import { BaseGameplayElement, getGameplayWeights, GameplayType, getModifierOptions, AttributeLocation, AttributeCategory } from "../../types";
+import { BaseGameplayElement, getGameplayWeights, GameplayType, getModifierOptions, AttributeLocation, AttributeCategory, ElementTypes } from "../../types";
 import { attributeIdByPart } from "../attributes";
 
 type Skill = BaseGameplayElement;
 
-type SkillDefinition = MakeKeyOptional<Skill, "type" | "name" | "level">;
+type SkillDefinition = Omit<MakeKeyOptional<Skill, "tags" | "name" | "level">, "type">
 
 interface SkillGroup extends SkillDefinition {
     children: (Pick<SkillDefinition, "id"> & Partial<Omit<SkillDefinition, "id">>)[]
 }
 
+const type = ElementTypes.skill;
+
 function getSkill(input: SkillDefinition): Readonly<Skill> {
     return {
         ...input,
-        type: "skill",
+        type,
+        tags: [type, ...(input.tags || [])],
         name: input.name || input.id,
         level: 0
     };
