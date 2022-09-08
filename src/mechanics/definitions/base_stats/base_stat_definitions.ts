@@ -5,7 +5,7 @@ import { attributeIdByPart } from "../attributes";
 /** Define outputs */
 type BaseStatId = BaseGameplayElement["id"];
 
-type BaseStatDefinition = Omit<MakeKeyOptional<BaseGameplayElement, "name" | "tags">, "type">
+type BaseStatDefinition = Omit<MakeKeyOptional<BaseGameplayElement, "id" | "tags">, "type">
 
 
 const type = ElementTypes.stat;
@@ -14,16 +14,16 @@ const subType = "baseStat";
 function getBaseStat(input: BaseStatDefinition): Readonly<BaseGameplayElement> {
     return {
         ...input,
+        id: input.id || input.name.toLowerCase(),
         type,
         subType,
         tags: [type, subType, ...(input.tags || [])],
-        name: input.name || input.id
     };
 }
 
 const baseStatsDefinitionArr: BaseStatDefinition[] = [
     {
-        id: "HP",
+        name: "HP",
         description: "HP is based on Stamina and Willpower. This represents the ability to shrug off damage, as well as the willpower to keep going while hurt",
         gameplayWeight: getGameplayWeights({
             [GameplayType.combat]: 4
@@ -38,7 +38,7 @@ const baseStatsDefinitionArr: BaseStatDefinition[] = [
         }, ModifierComparison.sum)
     },
     {
-        id: "Initiative",
+        name: "Initiative",
         gameplayWeight: getGameplayWeights({
             [GameplayType.combat]: 1
         }),

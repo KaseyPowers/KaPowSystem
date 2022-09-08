@@ -10,6 +10,14 @@ export enum PrerequisiteComparison {
     every = "All Of"
 };
 
+/** TODO: Prerequisites depending on conditions.
+ * Base level prerequisits are minimum to unlock something once. 
+ * If that ability has multiple levels, would need to define the higher prerequisit for the higher level potentially. 
+ * Other options are: 
+ * 1. Once prerequisits met for first level, each level after is just the investment cost to upgrade, don't care about other skills. 
+ * 2. Make higher level versions seperate items with the higher prerequisits. 
+ */
+
 /** base type, just the id of the element required */
 export type PrerequisiteElement = string;
 /** Tuple representing a requirement for an element at a certain rank */

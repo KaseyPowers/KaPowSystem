@@ -1,5 +1,5 @@
 import { MakeKeyOptional } from "../../../../utils";
-import { BaseGameplayElement, getGameplayWeights, GameplayType, getModifierOptions } from "../../../types";
+import { BaseElement } from "../../../types";
 
 import {
     weaponProficiencyType as type,
@@ -7,7 +7,7 @@ import {
     addProficiencyPrerequisite
 } from "./abilities";
 
-type WeaponProficiency = BaseGameplayElement;
+type WeaponProficiency = BaseElement;
 
 type WeaponProficiencyDefinition = Omit<MakeKeyOptional<WeaponProficiency, "tags" | "id" | "level">, "type" | "subType"> & {
     /** Each item in this array is a string for abilityId, and rank value for the prerequisit */
@@ -37,77 +37,29 @@ function getWeaponProficiency(input: WeaponProficiencyDefinition): Readonly<Weap
 const weaponProficiencyDefinitions: WeaponProficiencyDefinition[] = [
     {
         name: "Unamrmed",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         name: "Flexible",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         name: "Shield",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         name: "Blade",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         id: "staffs",
         name: "Staffs & Polearms",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         name: "Thrown",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         name: "Projectile",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
     {
         id: "great-weapons",
         name: "Great Weapons",
-        gameplayWeight: getGameplayWeights({
-            [GameplayType.combat]: 1
-        }),
-        mods: getModifierOptions({
-            options: {}
-        })
     },
 ];
 
