@@ -1,10 +1,16 @@
-import { ObjectValues } from "../utils";
+import { CommonObj } from "./shared";
+import { Tag } from "./tag";
+import { Modifiers } from "./modifiers";
+import { PartialRequired, ObjectValues } from "../utils"
+
 /**
  * An Element (or Gameplay Element) is a building block of the game, making up parts of everything from what defines a person and what they can do in our game, or as simple as definitions of a simple stick as a weapon.
  */
-export const ELEMENT_TYPES = {
+export const ELEMENT_CATEGORIES = {
     /** These elements are used to define things like element types */
-    DEFINITION: "definition",
+    DEFINITION: "Definition",
+    /** Class defines all the types of classes and what they add to a character */
+    CLASS: "Class",
     /** Foundational Elements that numerically represent a natural aptitude and potential in various aspects. */
     ATTRIBUTE: "Attribute",
     /** Stat - Could have a better name, basics that are derived from attributes but can't be leveled up */
@@ -17,7 +23,11 @@ export const ELEMENT_TYPES = {
     ACTION: "Action",
     /** A stance represents some sort of posture that helps with certain actions or has various pros/cons.  */
     STANCE: "Stance",
-    ITEM: "item",
+    /** Crafting Element represents the ability to craft certain things, either new types of crafting, or being better at making certain things  */
+    CRAFTING: "Crafting",
+    /** A Bonus adds something to a character, as simple as adding a new proficiency, to complex like granting advantage to a skill check in certain situations */
+    BONUS: "Bonus",
+    ITEM: "Item",
     /** NOTE: more types will be added as they come up */
     /** Filler types */
     /** Misc is a catch all for things that don't fit in other types yet */
@@ -26,34 +36,52 @@ export const ELEMENT_TYPES = {
     TODO: "TODO"
 } as const;
 
-export type ElementType = ObjectValues<typeof ELEMENT_TYPES>;
+export type ElementCategoryType = ObjectValues<typeof ELEMENT_CATEGORIES>;
 
-export interface Element<T extends void | string = void> {
-    /** Unique identifier, ideally unique for all elements, minimum unique to the group it's in */
-    id: string,
-    /** The diaply name for the element */
-    name: string,
-    /** Optional shorthand/abbreviation for simplicity, expecially in modifier math displays. Ex. Strength = STR */
-    shorthand?: string,
+export interface Element extends CommonObj {
     /** Description for longer flavor text */
-    description?: string,
+    description?: string | string[],
     /** 
      * The type of element, used for UI of each element card, as well as grouping, and some basic rules/restrictions
      * Examples: Attribute, Stat, Skill, Proficiency, Items, Action
      */
-    type: T extends void ? ElementType : [ElementType, T],
-
-    /** tags are flexible attributes of an element, used to indicate types of actions, or categories of more general type. ex. a weapon would use tags to indicate the different qualities it might have */
-    tags?: string[],
+    type: ElementCategoryType,
+    tags: Tag[],
+    /** this tag flag indicates this definition applies to a tag (for linking if needed) */
+    definesTag?: boolean
 }
 
-// export interface SkillElement extends Element {
-//     elementType: ElementType.skill,
-//     /** An optional string for tracking derivative skills, ex. knowledge/lore and it's fields */
-//     subtypes?: string[]
-// }
 
+export interface DefinitionElement extends PartialRequired<Element, "description" | "definesTag"> {
+    type: typeof ELEMENT_CATEGORIES.DEFINITION,
+}
+
+export interface AttributeElement extends Element {
+    type: typeof ELEMENT_CATEGORIES.ATTRIBUTE,
+    /** shorthand/abbreviation for simplicity, only used for attribute's modifier math displays. Ex. Strength = STR */
+    shorthand: string,
+}
+
+export interface ItemElement extends Element {
+    type: typeof ELEMENT_CATEGORIES.ITEM,
+    /** TODO: Cost options for items, but number to show it's destinct from other types  */
+    cost: number,
+}
+
+export interface ModifiersElement extends Element {
+    modifiers: Modifiers
+};
+
+export interface StatElement extends ModifiersElement {
+    type: typeof ELEMENT_CATEGORIES.STAT
+};
+
+type SpecifiedElementCategories = DefinitionElement["type"] | AttributeElement["type"] | ItemElement["type"] | StatElement["type"];
+
+/** For elements that can be added and aren't default to the base character. (While Items are similar, they aren't in this category) */
 export interface AddableElement extends Element {
+    /** Limiting the categories available for addable elements */
+    type: Exclude<ElementCategoryType, SpecifiedElementCategories>,
     /** Using cost in case we have point-buy setup with more variations than free or not-free options */
     cost: boolean,
     /** 
@@ -69,7 +97,17 @@ export interface AddableElement extends Element {
     /** NOTE: Prerequisites and Requirements often overlap, and those overlaps don't always need to be explicetly stated in quick referenced views. Traits referring to exclusivity of that element are treated as prerequisits by default. Requirements are more likely to need clarification, such as requiring a certain weapon equipped would imply a prerequisit of being able to use that weapon at all, but could also be clarified if it requires a specific level of proficiency with that weapon. */
 }
 
-/** Special Element interface for physical items */
-export interface ItemElement extends Element {
+export interface SkillElement extends AddableElement, ModifiersElement {
+    type: typeof ELEMENT_CATEGORIES.SKILL
+}
 
+/** Proficiency works like skills but will always need to be added by something */
+export interface ProficiencyElement extends AddableElement, ModifiersElement {
+    type: typeof ELEMENT_CATEGORIES.PROFICIENCY,
+    cost: true
+}
+
+/** TODO: action element logic */
+export interface ActionElement extends AddableElement {
+    type: typeof ELEMENT_CATEGORIES.ACTION,
 }
