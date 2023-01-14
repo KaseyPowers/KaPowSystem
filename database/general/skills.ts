@@ -1,26 +1,24 @@
 import { SkillElement, ELEMENT_CATEGORIES } from "../types";
 import { attributeElementsById } from "../root_elements";
+import { MakeInputType, findTag } from "../utils";
 
-import { generalSkillTagsById } from "./general_actions";
+import { generalTags } from "./general_elements";
 
-const {
-    recall_knowledge: recallKnowledge
-} = generalSkillTagsById;
+const recallKnowledge = findTag(generalTags, "recall_knowledge");
 
-type SkillElementInput = Omit<SkillElement, "id" | "cost" | "type" | "modifiers" | "tags"> & Partial<Pick<SkillElement, "id" | "tags">> & { attributes: string[] };
-
+type SkillElementInput = MakeInputType<SkillElement, "cost" | "type" | "modifiers", "id" | "tags"> & { attributes: string[] };
 
 function getElement(input: SkillElementInput): SkillElement {
-    const { id, attributes, tags, ...inputRest } = input;
+    const { attributes, ...inputRest } = input;
     return {
+        tags: [],
+        id: input.name.toLowerCase(),
         ...inputRest,
-        id: id || input.name.toLowerCase(),
         type: ELEMENT_CATEGORIES.SKILL,
         cost: false,
         modifiers: {
             parts: attributes.map(id => attributeElementsById[id])
         },
-        tags: tags || []
     };
 }
 
@@ -126,6 +124,16 @@ const generalSkillInputs: SkillElementInput[] = [
             recallKnowledge
         ]
     },
+    {
+        name: "Performance",
+        attributes: ["charisma", "will"],
+        description: "Performance checks are used when performing for an audience and represents how well you handle the crowd. Depending on the type of performance, and your proficiency with it, you might be asked to roll a seperate skillcheck for that skill with some advantage/disadvantage based on the performance roll."
+    },
+    // {
+    //     id: "performanceChecks",
+    //     name: "Performance Checks",
+    //     description: "Instead of performance as a learned skill, the act of handling social pressures around a performance is done with a social saving throw. The results of that saving throw will help or hinder your ability to do the performance. Tact: when initiating a performance in a socially awkward situation. (TBD: when to use this or Decieve for distractions) Courage: default for performances, for handling nerves/stage-fright."
+    // }
     {
         name: "crafting",
         attributes: ["dexterity", "intelligence"],

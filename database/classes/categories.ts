@@ -1,4 +1,4 @@
-import { findTag, ObjectValues } from "../utils/tags";
+import { findTag, ObjectValues } from "../utils";
 import { DefinitionInput, getDefinitions, Tag } from "../types";
 
 export const CLASS_CATEGORIES = {

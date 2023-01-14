@@ -111,3 +111,9 @@ export interface ProficiencyElement extends AddableElement, ModifiersElement {
 export interface ActionElement extends AddableElement {
     type: typeof ELEMENT_CATEGORIES.ACTION,
 }
+export interface CraftingElement extends AddableElement {
+    type: typeof ELEMENT_CATEGORIES.CRAFTING,
+}
+export interface StanceElement extends AddableElement {
+    type: typeof ELEMENT_CATEGORIES.STANCE,
+}

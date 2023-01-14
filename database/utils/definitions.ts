@@ -1,6 +1,5 @@
-import { DefinitionElement, ELEMENT_CATEGORIES, Tag } from ".";
-
-import { MakeInputType } from "../utils";
+import { DefinitionElement, ELEMENT_CATEGORIES, Tag } from "../types";
+import { MakeInputType } from "./types";
 
 export type DefinitionInput = MakeInputType<DefinitionElement, "type", "id" | "definesTag" | "tags">;
 
