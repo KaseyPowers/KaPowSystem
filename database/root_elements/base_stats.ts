@@ -1,6 +1,6 @@
 import { ELEMENT_CATEGORIES, StatElement } from "../types";
 import { attributeElementsById } from "./attributes";
-import { MakeInputType } from "../../utils";
+import { MakeInputType } from "../utils";
 
 export type BaseStatElementInput = MakeInputType<StatElement, "type" | "modifiers", "id" | "tags"> & { attributes: string[] };
 

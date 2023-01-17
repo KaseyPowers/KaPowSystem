@@ -1,6 +1,8 @@
 import { Tag } from "../../types";
-import { ClassElement, ClassElementInput, getClassTags } from "../types";
-import { getElement } from "./utils";
+import { ClassElement, ClassElementInput, getClassTags, getGetElement } from "../types";
+import { CLASS_CATEGORIES } from "../categories";
+
+const getElement = getGetElement(CLASS_CATEGORIES.PROFESSION);
 
 const professionsInput: ClassElementInput[] = [
     /** Main options */
@@ -35,6 +37,7 @@ const professionsInput: ClassElementInput[] = [
         /** Skill: Knowledge */
     },
     {
+        /** Alt name: Tinkerer */
         name: "Maker",
         /** Skill: Crafting */
     },

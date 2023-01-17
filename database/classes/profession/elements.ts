@@ -249,5 +249,6 @@ const professionPartInputs: ProfessionElementInput[] = [
 
 const { elements, tags } = getStandardElements(professionPartInputs.map(input => getElement(input)));
 
+
 export const professionPartElements = elements;
 export const professionPartTags = tags;

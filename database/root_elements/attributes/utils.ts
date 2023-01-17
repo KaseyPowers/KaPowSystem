@@ -1,6 +1,5 @@
 import { ELEMENT_CATEGORIES, AttributeElement, Tag } from "../../types";
-import { findTag } from "../../utils";
-import { MakeInputType } from "../../../utils";
+import { findTag, MakeInputType } from "../../utils";
 
 import {
     CharacteristicCategoryType,
