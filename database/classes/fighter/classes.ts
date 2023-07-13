@@ -2,7 +2,7 @@ import { Tag } from "../../types";
 import { ClassElement, ClassElementInput, getClassTags, getGetElement } from "../types";
 import { CLASS_CATEGORIES } from "../categories";
 
-const getElement = getGetElement(CLASS_CATEGORIES.COMBAT);
+const getElement = getGetElement(CLASS_CATEGORIES.FIGHTER);
 
 const fighterInputs: ClassElementInput[] = [
     /** Main options */

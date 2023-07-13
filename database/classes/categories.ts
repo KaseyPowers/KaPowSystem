@@ -5,7 +5,7 @@ export const CLASS_CATEGORIES = {
     /** Classes for a persons focus in day to day life, how they might make a living, or what they are training/studying to do. */
     PROFESSION: "Profession",
     /** Classes for how a person fighting style or how they approach combat situations */
-    COMBAT: "Combat",
+    FIGHTER: "Fighter",
     /** Classes that determine a persons magic access and abilities.  */
     MAGIC: "Magic"
 } as const;
@@ -21,7 +21,7 @@ const rawDefinitions: DefinitionInput[] = [
         /** TODO: In the description, talk about the high level rules for this class */
     },
     {
-        name: CLASS_CATEGORIES.COMBAT,
+        name: CLASS_CATEGORIES.FIGHTER,
         description: "Classes for how a person fighting style or how they approach combat situations",
         /** TODO: In the description, talk about the high level rules for this class */
     },
